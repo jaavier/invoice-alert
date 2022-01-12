@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useInvoice } from '../../contexts/invoices';
+import { useInvoice } from '../../../contexts/invoices';
 
 const Button = ({ onClick, text }) => (
     <button onClick={onClick} className="bg-green-400 p-2">

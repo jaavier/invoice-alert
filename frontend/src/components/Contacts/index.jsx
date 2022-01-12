@@ -1,17 +1,15 @@
 import React from 'react';
 import { DateTime } from 'luxon';
-import Layout from '../../components/Layout';
 
 export default function Contacts(props) {
     const { invoices = [] } = props;
     return (
         <React.Fragment>
-            <Layout>
-                <div className="">
-                    <h1 className="text-3xl underline text-white">Contacts</h1>
-                </div>
-                <div className="">
-                    {/* <table className="text-center p-2 w-full">
+            <div className="">
+                <h1 className="text-3xl underline text-white">Contacts</h1>
+            </div>
+            <div className="">
+                {/* <table className="text-center p-2 w-full">
                     <thead className="border-b-2 mb-2 h-10 text-white bg-gray-500">
                         <tr>
                             <th>#</th>
@@ -39,8 +37,7 @@ export default function Contacts(props) {
                         }
                     </tbody>
                 </table> */}
-                </div>
-            </Layout>
+            </div>
         </React.Fragment>
     );
 }

@@ -5,6 +5,10 @@ const SchemaSettings = new mongoose.Schema({
 		type: String,
 		required: true,
 		unique: true
+	},
+	maxAttempts: {
+		type: Number,
+		default: 3
 	}
 });
 

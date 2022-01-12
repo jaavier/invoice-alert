@@ -1,9 +1,8 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import loadAlerts from '../../helpers/requests/loadAlerts';
-import unlockAlert from '../../helpers/requests/unlockAlert';
+import loadAlerts from '../../../helpers/requests/loadAlerts';
+import unlockAlert from '../../../helpers/requests/unlockAlert';
 import InvoiceDetails from '../CreateAlert/InvoiceDetails';
-import Layout from '../../components/Layout';
 
 const ShowAlert = ({ data }) => {
     console.log("🚀 ~ file: index.jsx ~ line 9 ~ ShowAlert ~ data", data)

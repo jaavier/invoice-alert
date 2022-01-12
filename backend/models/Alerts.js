@@ -37,6 +37,11 @@ const AlertSchema = new mongoose.Schema({
 	attempts: {
 		type: Number,
 		default: 0
+	},
+	status: {
+		type: String,
+		default: 'pending',
+		required: true
 	}
 });
 module.exports = mongoose.model('Alert', AlertSchema);

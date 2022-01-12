@@ -1,15 +1,16 @@
-import CreateAlert from './components/CreateAlert';
-import CreateInvoice from './components/CreateInvoices';
-import ListInvoices from './components/ListInvoices';
-import ListAlerts from './components/ListAlerts';
-import ViewInvoice from './components/ViewInvoice';
-import ViewAlert from './components/ViewAlert';
-import Contacts from './components/Contacts';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import Layout from './components/Layout';
+import CreateAlert from './components/Alerts/CreateAlert';
+import ListAlerts from './components/Alerts/ListAlerts';
+import ViewAlert from './components/Alerts/ViewAlert';
+import ViewInvoice from './components/Invoices/ViewInvoice';
+import CreateInvoice from './components/Invoices/CreateInvoices';
+import ListInvoices from './components/Invoices/ListInvoices';
+import Contacts from './components/Contacts';
+import Container from './components/Layout/Container';
+import Sidebar from './components/Layout/Sidebar';
 import loadInvoices from './helpers/requests/loadInvoices';
 import { useInvoice } from './contexts/invoices';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
 function App() {
 	const { setInvoices } = useInvoice();
@@ -21,18 +22,23 @@ function App() {
 	}, []);
 
 	return (
-		<BrowserRouter>
-			<Routes>
-				<Route path="/" element={<ListInvoices />} />
-				<Route path="/invoices" element={<ListInvoices />} />
-				<Route path="/contacts" element={<Contacts />} />
-				<Route path="/invoices/:invoiceId" element={<ViewInvoice />} />
-				<Route path="/invoices/create" element={<CreateInvoice />} />
-				<Route path="/alerts" element={<ListAlerts />} />
-				<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />
-				<Route path="/public/invoice/:alertId/:password" element={<ViewAlert />} />
-			</Routes>
-		</BrowserRouter>
+		<div className="flex">
+			<BrowserRouter>
+				<Sidebar />
+				<Container>
+					<Routes>
+						<Route path="/" element={<ListInvoices />} />
+						<Route path="/invoices" element={<ListInvoices />} />
+						<Route path="/contacts" element={<Contacts />} />
+						<Route path="/invoices/:invoiceId" element={<ViewInvoice />} />
+						<Route path="/invoices/create" element={<CreateInvoice />} />
+						<Route path="/alerts" element={<ListAlerts />} />
+						<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />
+						<Route path="/public/invoice/:alertId/:password" element={<ViewAlert />} />
+					</Routes>
+				</Container>
+			</BrowserRouter>
+		</div>
 	);
 }
 

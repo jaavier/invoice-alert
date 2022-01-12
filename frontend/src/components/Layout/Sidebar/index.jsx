@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom'
 
 export default function SiderbarDark() {
     const [menu, setMenu] = React.useState();
@@ -9,20 +10,20 @@ export default function SiderbarDark() {
         </div>
         <ul className="px-2">
             <li className="py-2 border-gray-800">
-                <a
-                    href="/invoices"
+                <Link
+                    to="/invoices"
                     className="text-white text-sm font-semibold"
                 >
                     Home
-                </a>
+                </Link>
             </li>
             <li className="py-2 border-gray-800">
-                <a
-                    href="/invoices/create"
+                <Link
+                    to="/invoices/create"
                     className="text-white text-sm font-semibold"
                 >
                     Create Invoice
-                </a>
+                </Link>
             </li>
             <li
                 onClick={() => setMenu(menu === 'alerts' ? null : 'alerts')}
@@ -37,30 +38,30 @@ export default function SiderbarDark() {
                     menu === 'alerts' && (
                         <ul className="px-4">
                             <li className="text-white text-sm pt-2 font-semibold">
-                                <a href="/alerts">View All</a>
+                                <Link to="/alerts">View All</Link>
                             </li>
                             <li className="text-white text-sm pt-2 font-semibold">
-                                <a href="/alerts/create">Create Alert</a>
+                                <Link to="/alerts/stats">Statistics</Link>
                             </li>
                         </ul>
                     )
                 }
             </li>
             <li className="py-2">
-                <a
-                    href="/contacts"
+                <Link
+                    to="/contacts"
                     className="text-white text-sm font-semibold"
                 >
                     Contacts
-                </a>
+                </Link>
             </li>
             <li className="py-2">
-                <a
-                    href="/settings"
+                <Link
+                    to="/settings"
                     className="text-white text-sm font-semibold"
                 >
                     Settings
-                </a>
+                </Link>
             </li>
 
         </ul>

@@ -26,13 +26,26 @@ router.post('/', Validate('alert'), async (req, res) => {
 		since: req.body.since,
 		until: req.body.until,
 		message: req.body.message,
-		password: uuid()
+		password: uuid(),
+		status: 'pending'
 	});
 	await alert.save();
 	return res.json({
 		message: 'Alert added successfully',
 		uuid: alert.id
 	});
+});
+
+router.put('/:invoiceId', async (req, res) => {
+	const alert = await Alerts.findOne({ invoiceId: req.params.invoiceId });
+	if (!alert) return res.json({ message: 'Alert not found' });
+	const { since, until, message, status } = req.body;
+	alert.status = status;
+	alert.since = since;
+	alert.until = until;
+	alert.message = message;
+	await alert.save();
+	return res.json({ message: 'Alert updated successfully' });
 });
 
 router.post('/unlock/:alertId', async (req, res) => {
