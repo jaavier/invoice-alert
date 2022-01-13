@@ -54,7 +54,6 @@ export default function ModifyAlert() {
 			console.log(error);
 			setSuccess(2);
 		}
-
 	}
 
 	React.useEffect(() => {
