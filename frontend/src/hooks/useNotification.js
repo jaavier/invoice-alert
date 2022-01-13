@@ -12,7 +12,7 @@ export default function useNotification({ text: _text, type: _type, autoClose: _
 	const update = ({ text, type, hide, autoClose }) => {
 		if (text) setText(text);
 		if (type) setType(validateNotificationType(type));
-		if (typeof autoClose === typeof 'boolean' || typeof autoClose === 'number') {
+		if (typeof autoClose === 'boolean' || typeof autoClose === 'number') {
 			setAutoClose(autoClose);
 		}
 		setHide(hide);
