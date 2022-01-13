@@ -36,8 +36,8 @@ router.post('/', Validate('alert'), async (req, res) => {
 	});
 });
 
-router.put('/:invoiceId', async (req, res) => {
-	const alert = await Alerts.findOne({ invoiceId: req.params.invoiceId });
+router.put('/:alertId', async (req, res) => {
+	const alert = await Alerts.findOne({ id: req.params.alertId });
 	if (!alert) return res.json({ message: 'Alert not found' });
 	const { since, until, message, status } = req.body;
 	alert.status = status;

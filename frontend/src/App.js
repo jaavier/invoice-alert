@@ -2,6 +2,7 @@ import React from 'react';
 import CreateAlert from './components/Alerts/CreateAlert';
 import ListAlerts from './components/Alerts/ListAlerts';
 import ViewAlert from './components/Alerts/ViewAlert';
+import ModifyAlert from './components/Alerts/ModifyAlert';
 import ViewInvoice from './components/Invoices/ViewInvoice';
 import CreateInvoice from './components/Invoices/CreateInvoices';
 import ListInvoices from './components/Invoices/ListInvoices';
@@ -33,7 +34,8 @@ function App() {
 						<Route path="/invoices/:invoiceId" element={<ViewInvoice />} />
 						<Route path="/invoices/create" element={<CreateInvoice />} />
 						<Route path="/alerts" element={<ListAlerts />} />
-						<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />
+						<Route path="/alerts/create/:alertId" element={<CreateAlert />} />
+						<Route path="/alerts/modify/:alertId" element={<ModifyAlert />} />
 						<Route path="/public/invoice/:alertId/:password" element={<ViewAlert />} />
 					</Routes>
 				</Container>

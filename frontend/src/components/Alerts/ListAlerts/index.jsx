@@ -34,9 +34,18 @@ export default function ListAlerts(props) {
                                 <td>{DateTime.fromISO(alert.until).toFormat('dd-MM-yyyy')}</td>
                                 <td>{alert.message}</td>
                                 <td>
-                                    <a href={`/alerts/delete/${alert.id}`}>
-                                        <i class="fas fa-times"></i>
-                                    </a>
+                                    <div className="flex">
+                                        <div className="mr-3">
+                                            <a href={`/alerts/delete/${alert.id}`}>
+                                                <i class="fas fa-times"></i>
+                                            </a>
+                                        </div>
+                                        <div>
+                                            <a href={`/alerts/modify/${alert.id}`}>
+                                                <i class="fas fa-pen"></i>
+                                            </a>
+                                        </div>
+                                    </div>
                                 </td>
                             </tr>
                         ))}
