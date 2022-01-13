@@ -3,10 +3,14 @@ const express = require('express');
 const Invoices = require('../models/Invoices');
 const router = express.Router();
 const Validate = require('../middlewares/Validate');
+const statusList = require('../constants/invoices/statusList');
 
 router.get('/', async (req, res) => {
-	// add filter by user in session
-	const invoices = await Invoices.find();
+	const filter = {};
+	const { status } = req.query;
+	const limit = req.query.limit ? parseInt(req.query.limit) : 100;
+	if (statusList.indexOf(status) !== -1) filter.status = status;
+	const invoices = await Invoices.find(filter).limit(limit);
 	return res.json(invoices);
 });
 

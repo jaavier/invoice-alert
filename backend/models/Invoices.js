@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const statusList = require('../constants/invoices/statusList');
 
 const InvoiceSchema = new mongoose.Schema({
 	id: {
@@ -33,6 +34,11 @@ const InvoiceSchema = new mongoose.Schema({
 	clientId: {
 		type: String,
 		required: true
+	},
+	status: {
+		type: String,
+		required: true,
+		enum: statusList
 	}
 });
 
