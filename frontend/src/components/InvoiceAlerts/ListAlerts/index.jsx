@@ -5,10 +5,12 @@ import deleteAlert from '../../../helpers/requests/deleteAlert';
 import Notification from '../../../helpers/Notification';
 import useNotification from '../../../hooks/useNotification';
 import { Link } from 'react-router-dom';
+import Filters from '../../../helpers/Tables/Filters';
+import useAlerts from '../../../hooks/useAlerts';
 
 export default function ListAlerts(props) {
-    const [alerts, setAlerts] = React.useState([]);
     const notification = useNotification({});
+    const alerts = useAlerts();
     const handlerDeleteAlert = async (alertId, index) => {
         if (window.confirm("Are you sure you want to delete this alert?")) {
             deleteAlert(alertId)
@@ -36,6 +38,7 @@ export default function ListAlerts(props) {
                 <h1 className="text-2xl text-white font-bold">List Alerts</h1>
             </div>
             <div className="w-full">
+                <Filters statuses={ } />
                 <table className="w-full border-b-2 text-center text-white">
                     <thead className="border-b-2 mb-2 h-10 text-white bg-gray-500">
                         <tr className="h-8">

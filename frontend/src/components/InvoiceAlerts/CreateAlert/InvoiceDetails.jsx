@@ -1,21 +1,11 @@
 import React from 'react';
 import { DateTime } from 'luxon';
 import { useParams } from 'react-router-dom';
-import loadInvoices from '../../../helpers/requests/loadInvoices';
-import { useCreateAlert } from '../../../contexts/createAlert';
+import useInvoice from '../../../hooks/useInvoice';
 
 export default function InvoiceDetails(props) {
     const { invoiceId } = useParams();
-    const {
-        invoice,
-        setInvoice
-    } = useCreateAlert();
-
-    React.useEffect(() => {
-        loadInvoices(invoiceId).then(data => {
-            setInvoice(data);
-        });
-    }, []);
+    const [invoice, error] = useInvoice(invoiceId);
 
     return (
         <div>

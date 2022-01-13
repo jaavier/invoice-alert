@@ -28,17 +28,11 @@ const statusOptions = [{
 export default function CreateAlert() {
     const { invoiceId } = useParams();
     if (!invoiceId) window.location.href = "/"
+    const [since, setSince] = React.useState('');
+    const [until, setUntil] = React.useState('');
+    const [message, setMessage] = React.useState('');
+    const [status, setStatus] = React.useState('');
     const notification = useNotification({ hide: true });
-    const {
-        since,
-        until,
-        message,
-        status,
-        setSince,
-        setUntil,
-        setMessage,
-        setStatus,
-    } = useCreateAlert();
     const onSubmit = (e) => {
         e.preventDefault();
         createAlert({ invoiceId, since, until, message, status })

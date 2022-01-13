@@ -40,6 +40,7 @@ const AlertSchema = new mongoose.Schema({
 	},
 	status: {
 		type: String,
+		enum: [ 'pending', 'answered', 'cancelled' ],
 		default: 'pending',
 		required: true
 	}

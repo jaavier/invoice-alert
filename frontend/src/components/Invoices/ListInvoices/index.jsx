@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 // import { useInvoice } from '../../../contexts/invoices';
-import Invoices from '../../../helpers/tables/Invoices';
+import Invoices from '../../../helpers/Tables/Invoices';
 import { Link } from 'react-router-dom';
 import useInvoices from '../../../hooks/useInvoices';
-import Filters from './Filters';
+import Filters from '../../../helpers/Tables/Filters';
 
 const InvoiceActions = ({ invoiceId }) => {
 	return (
