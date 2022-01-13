@@ -8,7 +8,10 @@ const InvoiceActions = ({ invoiceId }) => {
             <Link to={`/alerts/create/${invoiceId}`} className="mr-2">
                 <i className="fas fa-bell"></i>
             </Link>
-            <a className="">
+            <a href="javascript:;" className="mr-2">
+                <i className="fas fa-pen"></i>
+            </a>
+            <a href="javascript:;" className="">
                 <i className="fas fa-times"></i>
             </a>
         </div>
@@ -18,7 +21,7 @@ const InvoiceActions = ({ invoiceId }) => {
 export default function Details({ invoices }) {
     return (
         <React.Fragment>
-            <table className="text-center p-2 w-full">
+            <table className="text-center p-2 w-full font-semibold">
                 <thead className="border-b-2 mb-2 h-10 text-white bg-gray-500">
                     <tr>
                         <th className="w-12">#</th>
@@ -27,6 +30,7 @@ export default function Details({ invoices }) {
                         <th>Issue Date</th>
                         <th>Due Date</th>
                         <th>Amount</th>
+                        <th>Status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -40,6 +44,7 @@ export default function Details({ invoices }) {
                                 <td>{DateTime.fromISO(invoice.issueDate).toFormat('dd-MM-yyyy')}</td>
                                 <td>{DateTime.fromISO(invoice.dueDate).toFormat('dd-MM-yyyy')}</td>
                                 <td>{invoice.amount}</td>
+                                <td>{invoice.status}</td>
                                 <td>
                                     <InvoiceActions invoiceId={invoice.id} />
                                 </td>

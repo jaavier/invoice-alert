@@ -10,17 +10,17 @@ import Contacts from './components/Contacts';
 import Container from './components/Layout/Container';
 import Sidebar from './components/Layout/Sidebar';
 import loadInvoices from './helpers/requests/loadInvoices';
-import { useInvoice } from './contexts/invoices';
+// import { useInvoice } from './contexts/invoices';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
-	const { setInvoices } = useInvoice();
+	// const { setInvoices } = useInvoice();
 
-	React.useEffect(() => {
-		loadInvoices().then((invoices) => {
-			setInvoices(invoices);
-		});
-	}, []);
+	// React.useEffect(() => {
+	// 	loadInvoices().then((invoices) => {
+	// 		setInvoices(invoices);
+	// 	});
+	// }, []);
 
 	return (
 		<div className="flex">
