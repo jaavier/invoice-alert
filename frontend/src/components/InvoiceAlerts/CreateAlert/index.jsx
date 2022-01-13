@@ -1,43 +1,67 @@
 import React, { useState, useEffect } from 'react';
 import { DateTime } from 'luxon';
-import loadInvoices from '../../../helpers/requests/loadInvoices';
 import createAlert from '../../../helpers/requests/createAlert';
 import { useParams } from 'react-router-dom';
 import InvoiceDetails from './InvoiceDetails';
+import Dropdown from '../../Forms/Dropdown';
+import { useCreateAlert } from '../../../contexts/createAlert';
+import Notification from '../../../helpers/Notification';
+import useNotification from '../../../hooks/useNotification';
+
+const statusOptions = [{
+    value: "answered",
+    label: "Answered"
+}, {
+    value: "cancelled",
+    label: "Cancelled"
+}, {
+    value: "expired",
+    label: "Expired"
+}, {
+    value: "pending",
+    label: "Pending"
+}, {
+    value: "paid",
+    label: "Paid"
+}];
 
 export default function CreateAlert() {
     const { invoiceId } = useParams();
     if (!invoiceId) window.location.href = "/"
-    const [since, setSince] = useState();
-    const [until, setUntil] = useState();
-    const [message, setMessage] = useState();
-    const [status, setStatus] = useState(0);
-    const [invoice, setInvoice] = useState({});
+    const notification = useNotification({ hide: true });
+    const {
+        since,
+        until,
+        message,
+        status,
+        setSince,
+        setUntil,
+        setMessage,
+        setStatus,
+    } = useCreateAlert();
     const onSubmit = (e) => {
         e.preventDefault();
-        createAlert({
-            invoiceId, since, until, message, setStatus
-        })
+        createAlert({ invoiceId, since, until, message, status })
+            .then(data => {
+                notification.update({ text: "Alert created successfully!", type: "success" });
+                setSince("");
+                setUntil("");
+                setMessage("");
+                setStatus("pending");
+            }).catch(error => {
+                notification.update({ text: "Something went wrong!", type: "error" });
+            })
     }
-
-    React.useEffect(() => {
-        loadInvoices(invoiceId).then(data => {
-            // setSince(invoices.issueDate);
-            // setMessage(`${invoices.receiver} has an invoice for ${invoices.amount}`);
-            setInvoice(data);
-            console.log(invoice)
-        });
-    }, []);
 
     return (
         <React.Fragment>
             <div className="flex">
                 <div className="w-1/3">
-                    <div className="mb-5 text-center">
-                        <h1 className="text-2xl text-white font-bold mb-2">Create Alert</h1>
+                    <div className="py-4">
+                        <h1 className="text-2xl text-white font-bold">Create Alert</h1>
                     </div>
                     <form onSubmit={onSubmit}>
-                        <div className="flex flex-wrap -mx-3 mb-6">
+                        <div className="flex flex-wrap -mx-3 mb-3">
                             <div className="w-full md:w-full px-3 mb-6 md:mb-0">
                                 <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
                                     Since
@@ -70,6 +94,7 @@ export default function CreateAlert() {
                                     onChange={(e) => setMessage(e.target.value)}
                                 />
                             </div>
+                            <Dropdown label="Status" options={statusOptions} value={status} setValue={setStatus} size="full" />
                         </div>
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
@@ -79,8 +104,11 @@ export default function CreateAlert() {
                     </form>
                 </div>
                 <div className="w-2/3 px-4">
-                    <InvoiceDetails invoice={invoice} />
+                    <InvoiceDetails />
                 </div>
+            </div>
+            <div className="w-full mt-5">
+                <Notification notification={notification} />
             </div>
         </React.Fragment>
     );

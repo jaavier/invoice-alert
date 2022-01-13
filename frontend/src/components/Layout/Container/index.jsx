@@ -7,7 +7,7 @@ export default function Home({ children }) {
 
     return (
         <React.Fragment>
-            <div className="w-full px-4 py-2 bg-slate-800">
+            <div className="w-full px-4 bg-slate-800">
                 {children}
             </div>
         </React.Fragment >

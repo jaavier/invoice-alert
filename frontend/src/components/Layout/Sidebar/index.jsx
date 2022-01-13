@@ -6,7 +6,7 @@ export default function SiderbarDark() {
 
     return <div className="w-1/6 bg-slate-900 text-white h-screen">
         <div className="bg-gray-700 p-4">
-            <h1 className="text-center">Welcome</h1>
+            <h1 className="text-center text-2xl">Welcome</h1>
         </div>
         <ul className="px-2">
             <li className="py-2 border-gray-800">

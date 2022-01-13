@@ -18,7 +18,7 @@ export default function ViewInvoice() {
             {
                 invoice ? (
                     <div>
-                        <h1 className="text-white text-3xl mb-2">View Invoice</h1>
+                        <h1 className="text-white text-3xl p-4">View Invoice</h1>
                         <Invoices invoices={invoice} />
                     </div>
                 ) : "Not found"

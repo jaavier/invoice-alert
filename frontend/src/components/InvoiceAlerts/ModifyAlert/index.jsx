@@ -6,8 +6,9 @@ import Button from '../../Forms/Button';
 import loadAlerts from '../../../helpers/requests/loadAlerts';
 import modifyAlert from '../../../helpers/requests/modifyAlert';
 import Dropdown from '../../Forms/Dropdown';
-import Alert from '../../../helpers/alerts/Alert';
-import { useAlerts } from '../../../contexts/alerts';
+import deleteAlert from '../../../helpers/requests/deleteAlert';
+import Notification from '../../../helpers/Notification';
+import useNotification from '../../../hooks/useNotification';
 
 const statusOptions = [{
 	value: "answered",
@@ -28,11 +29,7 @@ const statusOptions = [{
 
 
 export default function ModifyAlert() {
-	const {
-		success, setSuccess,
-		showError, setShowError,
-		errorMessage, setErrorMessage
-	} = useAlerts();
+	const notification = useNotification({});
 	const { alertId } = useParams();
 	const [since, setSince] = React.useState("");
 	const [until, setUntil] = React.useState("");
@@ -41,58 +38,74 @@ export default function ModifyAlert() {
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
-			setErrorMessage("Please fill in all fields");
-			setShowError(true);
+			notification.update({ text: "Please fill in all fields", type: "error" });
 			return;
 		}
 		try {
 			await modifyAlert({
 				alertId, since, until, message, status
 			});
-			setSuccess(1);
+			notification.update({ text: 'Alert modified successfully!', type: 'success' });
 		} catch (error) {
 			console.log(error);
-			setSuccess(2);
+			notification.update({ text: "Something went wrong", type: 'error' });
 		}
 	}
+
+	const handlerDeleteAlert = async (alertId, index) => {
+		if (window.confirm("Are you sure you want to delete this alert?")) {
+			deleteAlert(alertId)
+				.then(data => {
+					alert("Alert deleted successfully!");
+					window.location.href = "/alerts";
+				})
+				.catch(error => {
+					notification.update({ text: error.message, type: 'error' });
+				})
+		}
+	};
 
 	React.useEffect(() => {
 		loadAlerts(alertId)
 			.then(alert => {
+				console.log("🚀 ~ file: index.jsx ~ line 71 ~ React.useEffect ~ alert", alert)
 				const since = DateTime.fromISO(alert.since).toFormat('yyyy-MM-dd');
 				const until = DateTime.fromISO(alert.until).toFormat('yyyy-MM-dd');
 				setSince(since);
 				setUntil(until);
 				setMessage(alert.message);
 				setStatus(alert.status);
+				// hideNotification(true);
 			})
 			.catch(err => {
-				setSuccess(2)
+				notification.update({ text: "Something went wrong while loading alert information", type: 'error' });
 			})
 	}, [])
 
 	return (
 		<div>
-			<h1 className="text-2xl text-white">Modify Alert</h1>
-			<div className="flex flex-wrap -mx-3 mb-6">
-				<Input type="date" value={since} setValue={setSince} label="Since" />
-				<Input type="date" value={until} setValue={setUntil} label="Until" />
-				<Input type="text" value={message} setValue={setMessage} label="Message" />
-				<Dropdown label="Status" options={statusOptions} value={status} setValue={setStatus} />
+			<div className="py-4">
+				<h1 className="text-2xl text-white font-bold">Modify Alert</h1>
 			</div>
-			<div className="w-full">
-				<Button text="Modify" onClick={saveAlert} />
-			</div>
-			<div className="w-full mt-2">
-				{
-					success === 1 &&
-					<Alert>Alert modified successfully</Alert>
-				}
-				{
-					showError &&
-					<Alert type="error">{errorMessage}</Alert>
-				}
-			</div>
+			<React.Fragment>
+				<div className="flex flex-wrap -mx-3 mb-3">
+					<Input type="date" value={since} setValue={setSince} label="Since" />
+					<Input type="date" value={until} setValue={setUntil} label="Until" />
+					<Input type="text" value={message} setValue={setMessage} label="Message" />
+					<Dropdown label="Status" options={statusOptions} value={status} setValue={setStatus} />
+				</div>
+				<div className="w-full flex">
+					<div className="mr-2">
+						<Button type="success" text="Modify" onClick={saveAlert} />
+					</div>
+					<div className="mr-2">
+						<Button text="Delete" onClick={() => handlerDeleteAlert(alertId)} />
+					</div>
+				</div>
+				<div className="w-full mt-5">
+					<Notification notification={notification} />
+				</div>
+			</React.Fragment>
 		</div>
 	);
 }

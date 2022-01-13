@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { DateTime } from 'luxon';
 
 export default function CreateInvoice() {
-    const [receiver, setReceiver] = useState();
-    const [amount, setAmount] = useState();
-    const [sheetNumber, setSheetNumber] = useState();
-    const [issueDate, setIssueDate] = useState();
-    const [dueDate, setDueDate] = useState();
+    const [receiver, setReceiver] = useState("");
+    const [amount, setAmount] = useState("");
+    const [sheetNumber, setSheetNumber] = useState("");
+    const [issueDate, setIssueDate] = useState("");
+    const [dueDate, setDueDate] = useState("");
     const [status, setStatus] = useState(0);
-    const [uuid, setUuid] = useState();
+    const [uuid, setUuid] = useState("");
     const createInvoice = async (e) => {
         e.preventDefault();
         try {
@@ -36,12 +36,12 @@ export default function CreateInvoice() {
 
     return (
         <React.Fragment>
-            <div>
-                <h1 className="text-white text-3xl">Create Invoice</h1>
+            <div className="py-4">
+                <h1 className="text-white text-2xl font-bold">Create Invoice</h1>
             </div>
-            <div className="mt-5">
+            <div className="">
                 <form onSubmit={createInvoice}>
-                    <div className="flex flex-wrap -mx-3 mb-6">
+                    <div className="flex flex-wrap -mx-3 mb-4">
                         <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                             <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
                                 Receiver
@@ -98,8 +98,8 @@ export default function CreateInvoice() {
                             />
                         </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3 mb-6">
-                        <div className="w-full md:w-full px-3 mb-6 md:mb-0">
+                    <div className="flex flex-wrap -mx-3">
+                        <div className="w-full md:w-full px-3 md:mb-0">
                             <button
                                 className="shadow bg-white hover:bg-gray-100 focus:shadow-outline focus:outline-none text-gray-800 font-bold py-2 px-4 rounded"
                                 type="submit"

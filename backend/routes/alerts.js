@@ -10,13 +10,23 @@ cron(Alerts);
 
 router.get('/', async (req, res) => {
 	const alerts = await Alerts.find();
-	return res.json(alerts);
+	let output = [];
+	for (const alert of alerts) {
+		const invoice = await Invoices.findOne({ id: alert.invoiceId });
+		output.push({
+			...alert._doc,
+			sheetNumber: invoice.sheetNumber
+		});
+	}
+	return res.json(output);
 });
 
 router.get('/:id', async (req, res) => {
 	const alert = await Alerts.findOne({ id: req.params.id });
-	if (alert) return res.json(alert);
-	else return res.json({ message: 'Alert not found' });
+	if (alert) {
+		const invoice = await Invoices.findOne({ id: alert.invoiceId });
+		return res.json({ ...alert._doc, sheetNumber: invoice.sheetNumber });
+	} else return res.status(404).json({ message: 'Alert not found' });
 });
 
 router.post('/', Validate('alert'), async (req, res) => {
@@ -65,6 +75,13 @@ router.post('/unlock/:alertId', async (req, res) => {
 		await alert.save();
 		return res.status(404).json({ message: 'Alert not found' });
 	}
+});
+
+router.delete('/:alertId', async (req, res) => {
+	const alert = await Alerts.findOne({ id: req.params.alertId });
+	if (!alert) return res.status(404).json({ message: 'Alert not found' });
+	await Alerts.deleteOne({ id: req.params.alertId });
+	return res.json({ message: 'Alert deleted successfully' });
 });
 
 module.exports = router;
