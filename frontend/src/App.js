@@ -11,7 +11,7 @@ import Container from './components/Layout/Container';
 import Sidebar from './components/Layout/Sidebar';
 import loadInvoices from './helpers/requests/loadInvoices';
 import { useInvoice } from './contexts/invoices';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 
 function App() {
 	const { setInvoices } = useInvoice();
@@ -34,7 +34,8 @@ function App() {
 						<Route path="/invoices/:invoiceId" element={<ViewInvoice />} />
 						<Route path="/invoices/create" element={<CreateInvoice />} />
 						<Route path="/alerts" element={<ListAlerts />} />
-						<Route path="/alerts/create/:alertId" element={<CreateAlert />} />
+						<Route path="/alerts/create" element={<Navigate replace to="/" />} />
+						<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />
 						<Route path="/alerts/modify/:alertId" element={<ModifyAlert />} />
 						<Route path="/public/invoice/:alertId/:password" element={<ViewAlert />} />
 					</Routes>
