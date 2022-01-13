@@ -7,7 +7,6 @@ import InvoiceDetails from './InvoiceDetails';
 
 export default function CreateAlert() {
     const { invoiceId } = useParams();
-    console.log("🚀 ~ file: index.jsx ~ line 10 ~ CreateAlert ~ invoiceId", invoiceId)
     if (!invoiceId) window.location.href = "/"
     const [since, setSince] = useState();
     const [until, setUntil] = useState();
