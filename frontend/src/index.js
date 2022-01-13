@@ -3,12 +3,15 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { InvoicesProvider } from './contexts/invoices';
+import { AlertsProvider } from './contexts/alerts';
 import { render } from 'react-dom';
 
 render(
 	<React.StrictMode>
 		<InvoicesProvider>
-			<App />
+			<AlertsProvider>
+				<App />
+			</AlertsProvider>
 		</InvoicesProvider>
 	</React.StrictMode>,
 	document.getElementById('root')

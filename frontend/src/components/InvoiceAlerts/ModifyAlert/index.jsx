@@ -7,7 +7,7 @@ import loadAlerts from '../../../helpers/requests/loadAlerts';
 import modifyAlert from '../../../helpers/requests/modifyAlert';
 import Dropdown from '../../Forms/Dropdown';
 import Alert from '../../../helpers/alerts/Alert';
-import { useInvoice } from '../../../contexts/invoices';
+import { useAlerts } from '../../../contexts/alerts';
 
 const statusOptions = [{
 	value: "answered",
@@ -28,14 +28,16 @@ const statusOptions = [{
 
 
 export default function ModifyAlert() {
-	const { showError, setShowError } = useInvoice();
+	const {
+		success, setSuccess,
+		showError, setShowError,
+		errorMessage, setErrorMessage
+	} = useAlerts();
 	const { alertId } = useParams();
 	const [since, setSince] = React.useState("");
 	const [until, setUntil] = React.useState("");
 	const [message, setMessage] = React.useState("");
 	const [status, setStatus] = React.useState("");
-	const [success, setSuccess] = React.useState(0);
-	const [errorMessage, setErrorMessage] = React.useState("");
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
@@ -44,7 +46,7 @@ export default function ModifyAlert() {
 			return;
 		}
 		try {
-			const data = await modifyAlert({
+			await modifyAlert({
 				alertId, since, until, message, status
 			});
 			setSuccess(1);
@@ -69,14 +71,6 @@ export default function ModifyAlert() {
 				setSuccess(2)
 			})
 	}, [])
-
-	React.useEffect(() => {
-		let timeout = setTimeout(() => {
-			setShowError(false);
-			setSuccess(0);
-		}, 8000);
-		return () => clearTimeout(timeout);
-	}, [showError, success]);
 
 	return (
 		<div>

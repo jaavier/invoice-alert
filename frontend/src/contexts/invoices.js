@@ -7,7 +7,6 @@ function InvoicesProvider(props) {
 	const [ openDetails, setOpenDetails ] = React.useState();
 	const [ invoiceId, setInvoiceId ] = React.useState();
 	const [ sheetNumberSelected, setSheetNumberSelected ] = React.useState();
-	const [ showError, setShowError ] = React.useState(false);
 	const value = {
 		invoices,
 		setInvoices,
@@ -16,9 +15,7 @@ function InvoicesProvider(props) {
 		invoiceId,
 		setInvoiceId,
 		sheetNumberSelected,
-		setSheetNumberSelected,
-		showError,
-		setShowError
+		setSheetNumberSelected
 	};
 	return <Context.Provider value={value}>{props.children}</Context.Provider>;
 }
