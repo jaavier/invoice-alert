@@ -3,9 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Invoices from '../../../helpers/tables/Invoices';
 import { Link } from 'react-router-dom';
 import useInvoices from '../../../hooks/useInvoices';
-import Button from '../../Forms/Button';
-import Dropdown from '../../Forms/Dropdown';
-import Input from '../../Forms/Input';
+import Filters from './Filters';
 
 const InvoiceActions = ({ invoiceId }) => {
 	return (
@@ -20,14 +18,11 @@ const InvoiceActions = ({ invoiceId }) => {
 	)
 }
 
+
 export default function ListInvoices(props) {
 	const [limit, setLimit] = useState(100);
 	const [status, setStatus] = useState('');
-	const [invoices, error] = useInvoices(limit, status)
-
-	useEffect(() => {
-
-	}, [limit, status])
+	const [invoices, statusesInvoice, error] = useInvoices(limit, status)
 
 	return (
 		<React.Fragment>
@@ -37,39 +32,7 @@ export default function ListInvoices(props) {
 						<h1 className="text-2xl text-white font-bold">Home</h1>
 					</div>
 					<div className="flex">
-						<div className="text-white mt-1 mr-2 font-semibold">Filters:</div>
-						<div className="mr-2">
-							<Button
-								type="warning"
-								text="Pending"
-								onClick={() => setStatus('pending')}
-								size={1}
-								pressed={status === 'pending'} />
-						</div>
-						<div className="mr-2">
-							<Button
-								type="success"
-								text="Paid"
-								onClick={() => setStatus('paid')}
-								size={1}
-								pressed={status === 'paid'} />
-						</div>
-						<div className="mr-2">
-							<Button
-								type="danger"
-								text="Cancelled"
-								onClick={() => setStatus('cancelled')}
-								size={1}
-								pressed={status === 'cancelled'} />
-						</div>
-						<div className="mr-2">
-							<Button
-								type="primary"
-								text="All"
-								onClick={() => setStatus('')}
-								size={1}
-								pressed={status === ''} />
-						</div>
+						<Filters statuses={statusesInvoice} status={status} setStatus={setStatus} />
 					</div>
 				</div>
 			</div>

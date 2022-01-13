@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import loadInvoices from './loadInvoices';
+import statusesInvoice from './statusesInvoice';
 
 export default function useInvoices(limit = 100, status) {
 	console.log('🚀 ~ file: index.js ~ line 5 ~ useInvoices ~ status', status);
@@ -20,5 +21,5 @@ export default function useInvoices(limit = 100, status) {
 		[ status, limit ]
 	);
 
-	return [ invoices, error ];
+	return [ invoices, statusesInvoice, error ];
 }
