@@ -1,10 +1,13 @@
 import { useState, useEffect } from 'react';
-import loadAlerts from '../../helpers/requests/loadAlerts';
+import loadAlerts from './loadAlerts';
 
-export default function useAlerts(limit, status) {
+export default function useAlerts() {
+	const [ limit, setLimit ] = useState(100);
+	const [ status, setStatus ] = useState('');
 	const [ alerts, setAlerts ] = useState([]);
 	const load = async () => {
 		const data = await loadAlerts({ status, limit });
+		console.log('🚀 ~ file: index.js ~ line 10 ~ load ~ status', status);
 		setAlerts(data);
 	};
 	useEffect(
@@ -13,5 +16,5 @@ export default function useAlerts(limit, status) {
 		},
 		[ status, limit ]
 	);
-	return alerts;
+	return { alerts, setAlerts, status, setStatus, limit, setLimit };
 }

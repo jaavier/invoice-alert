@@ -1,29 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { DateTime } from 'luxon';
 import createAlert from '../../../helpers/requests/createAlert';
 import { useParams } from 'react-router-dom';
 import InvoiceDetails from './InvoiceDetails';
 import Dropdown from '../../Forms/Dropdown';
-import { useCreateAlert } from '../../../contexts/createAlert';
 import Notification from '../../../helpers/Notification';
 import useNotification from '../../../hooks/useNotification';
-
-const statusOptions = [{
-    value: "answered",
-    label: "Answered"
-}, {
-    value: "cancelled",
-    label: "Cancelled"
-}, {
-    value: "expired",
-    label: "Expired"
-}, {
-    value: "pending",
-    label: "Pending"
-}, {
-    value: "paid",
-    label: "Paid"
-}];
+import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 
 export default function CreateAlert() {
     const { invoiceId } = useParams();
@@ -33,6 +15,10 @@ export default function CreateAlert() {
     const [message, setMessage] = React.useState('');
     const [status, setStatus] = React.useState('');
     const notification = useNotification({ hide: true });
+    const statusesList = alertStatuses
+        .filter(({ text }) => text !== 'All')
+        .map(({ status: value, text: label }) => ({ value, label }))
+
     const onSubmit = (e) => {
         e.preventDefault();
         createAlert({ invoiceId, since, until, message, status })
@@ -46,7 +32,6 @@ export default function CreateAlert() {
                 notification.update({ text: "Something went wrong!", type: "error" });
             })
     }
-
     return (
         <React.Fragment>
             <div className="flex">
@@ -88,7 +73,7 @@ export default function CreateAlert() {
                                     onChange={(e) => setMessage(e.target.value)}
                                 />
                             </div>
-                            <Dropdown label="Status" options={statusOptions} value={status} setValue={setStatus} size="full" />
+                            <Dropdown label="Status" options={statusesList} value={status} setValue={setStatus} size="full" />
                         </div>
                         <button
                             className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"

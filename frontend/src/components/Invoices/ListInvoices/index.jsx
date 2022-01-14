@@ -4,6 +4,7 @@ import Invoices from '../../../helpers/Tables/Invoices';
 import { Link } from 'react-router-dom';
 import useInvoices from '../../../hooks/useInvoices';
 import Filters from '../../../helpers/Tables/Filters';
+import LimitPerPage from '../../../helpers/Tables/LimitPerPage';
 
 const InvoiceActions = ({ invoiceId }) => {
 	return (
@@ -47,14 +48,8 @@ export default function ListInvoices(props) {
 							</div>
 						)}
 			</div>
-			<div className="flex mt-5">
-				<div className="mt-2 mr-2 text-white font-semibold">Per page:</div>
-				<div className="mr-2">
-					<input type="number" placeholder="Limit" value={limit} onChange={(e) => setLimit(e.target.value)} className="p-2" />
-				</div>
-				{/* <div className="">
-					<Button type="primary" text="Apply" onClick={}/>
-				</div> */}
+			<div className="mt-5">
+				<LimitPerPage limit={limit} setLimit={setLimit} />
 			</div>
 		</React.Fragment>
 	);

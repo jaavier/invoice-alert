@@ -9,24 +9,7 @@ import Dropdown from '../../Forms/Dropdown';
 import deleteAlert from '../../../helpers/requests/deleteAlert';
 import Notification from '../../../helpers/Notification';
 import useNotification from '../../../hooks/useNotification';
-
-const statusOptions = [{
-	value: "answered",
-	label: "Answered"
-}, {
-	value: "cancelled",
-	label: "Cancelled"
-}, {
-	value: "expired",
-	label: "Expired"
-}, {
-	value: "pending",
-	label: "Pending"
-}, {
-	value: "paid",
-	label: "Paid"
-}]
-
+import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 
 export default function ModifyAlert() {
 	const notification = useNotification({});
@@ -35,6 +18,10 @@ export default function ModifyAlert() {
 	const [until, setUntil] = React.useState("");
 	const [message, setMessage] = React.useState("");
 	const [status, setStatus] = React.useState("");
+	const statusOptions = alertStatuses
+		.filter(({ text }) => text !== 'All')
+		.map(({ status: value, text: label }) => ({ value, label }))
+
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
@@ -75,7 +62,6 @@ export default function ModifyAlert() {
 				setUntil(until);
 				setMessage(alert.message);
 				setStatus(alert.status);
-				// hideNotification(true);
 			})
 			.catch(err => {
 				notification.update({ text: "Something went wrong while loading alert information", type: 'error' });

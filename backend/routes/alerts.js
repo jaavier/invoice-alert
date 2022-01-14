@@ -9,7 +9,10 @@ const cron = require('../cron');
 cron(Alerts);
 
 router.get('/', async (req, res) => {
-	const alerts = await Alerts.find();
+	const { limit = 100 } = req.query;
+	const filter = {};
+	if (req.query.status) filter.status = req.query.status;
+	const alerts = await Alerts.find(filter).limit(limit).sort({ createdAt: -1 });
 	let output = [];
 	for (const alert of alerts) {
 		const invoice = await Invoices.findOne({ id: alert.invoiceId });
