@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Invoices from '../../../helpers/Tables/Invoices';
 import useInvoice from '../../../hooks/useInvoice';
+import useApi from '../../../hooks/useApi';
 
 export default function ViewInvoice() {
     const { invoiceId } = useParams();
-    const [invoice, error] = useInvoice(invoiceId);
-    console.log("🚀 ~ file: index.jsx ~ line 9 ~ ViewInvoice ~ invoice", invoice)
+    const { get, response: invoice } = useApi('invoices');
+
+    useEffect(() => {
+        get(invoiceId);
+    }, [])
 
     return (
         <React.Fragment>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import loadAlerts from '../../../helpers/requests/loadAlerts';
 import { DateTime } from 'luxon';
 import deleteAlert from '../../../helpers/requests/deleteAlert';
@@ -6,43 +6,37 @@ import Notification from '../../../helpers/Notification';
 import useNotification from '../../../hooks/useNotification';
 import { Link } from 'react-router-dom';
 import Filters from '../../../helpers/Tables/Filters';
-import useAlerts from '../../../hooks/useAlerts';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import LimitPerPage from '../../../helpers/Tables/LimitPerPage';
+import useApi from '../../../hooks/useApi';
 
 export default function ListAlerts(props) {
     const notification = useNotification({});
-    const { alerts, status, limit, setAlerts, setStatus, setLimit } = useAlerts();
+    const { get, remove, params, responses } = useApi('alerts');
+
     const handlerDeleteAlert = async (alertId, index) => {
-        if (window.confirm("Are you sure you want to delete this alert?")) {
-            deleteAlert(alertId)
-                .then(data => {
-                    let _alerts = alerts;
-                    delete _alerts[index]
-                    setAlerts(_alerts);
-                    notification.update({ text: `Alert #${index + 1} deleted successfully!`, type: "success" });
-                })
-                .catch(error => {
-                    notification.update({ text: error.message, type: "error" });
-                })
+        if (window.confirm("Do you want to delete this alert? ")) {
+            await remove(alertId);
         }
     }
 
-    React.useEffect(() => {
-        loadAlerts().then(data => {
-            setAlerts(data);
-        });
-    }, []);
+    useEffect(
+        () => {
+            get();
+        },
+        [responses['delete'], params.status, params.limit]
+    );
+
 
     return (
         <React.Fragment>
             <div className="py-4">
                 <div className="flex justify-between">
                     <div className="w-1/5">
-                        <h1 className="text-2xl text-white font-bold">Home</h1>
+                        <h1 className="text-2xl text-white font-bold">Alerts</h1>
                     </div>
                     <div className="flex">
-                        <Filters statuses={alertStatuses} status={status} setStatus={setStatus} />
+                        <Filters statuses={alertStatuses} status={params.status} setStatus={params.setStatus} />
                     </div>
                 </div>
             </div>
@@ -60,7 +54,7 @@ export default function ListAlerts(props) {
                         </tr>
                     </thead>
                     <tbody className="bg-slate-900">
-                        {alerts.length > 0 ? alerts.map((alert, index) => (
+                        {responses['get'].length > 0 ? responses['get'].map((alert, index) => (
                             <tr key={index} className="h-12 border-b-2">
                                 <td>{index + 1}</td>
                                 <td><Link to={`/invoices/${alert.invoiceId}`} className="underline">View #{alert.sheetNumber}</Link></td>
@@ -71,9 +65,9 @@ export default function ListAlerts(props) {
                                 <td>
                                     <div className="flex">
                                         <div className="mr-3 w-1/2">
-                                            <a href="javascript:;" onClick={() => { handlerDeleteAlert(alert.id, index) }}>
+                                            <button onClick={() => { handlerDeleteAlert(alert.id, index) }}>
                                                 <i className="fas fa-times"></i>
-                                            </a>
+                                            </button>
                                         </div>
                                         <div className="mr-3 w-1/2">
                                             <Link to={`/alerts/modify/${alert.id}`}>
@@ -87,9 +81,9 @@ export default function ListAlerts(props) {
                     </tbody>
                 </table>
                 {
-                    alerts.length === 0 ? <div className="text-center text-white mt-2 font-semibold">
+                    responses['get'].length === 0 ? <div className="text-center text-white mt-2 font-semibold">
                         <Link to="/alerts">
-                            Create your first <u>{status}</u> alert
+                            Create your first <u>{params.status}</u> alert
                         </Link>
                     </div>
                         : null
@@ -101,7 +95,7 @@ export default function ListAlerts(props) {
                 </div>
             </div>
             <div className="mt-5">
-                <LimitPerPage limit={limit} setLimit={setLimit} />
+                <LimitPerPage limit={params.limit} setLimit={params.setLimit} />
             </div>
 
         </React.Fragment>

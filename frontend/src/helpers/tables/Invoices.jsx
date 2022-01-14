@@ -8,10 +8,10 @@ const InvoiceActions = ({ invoiceId }) => {
             <Link to={`/alerts/create/${invoiceId}`} className="mr-2">
                 <i className="fas fa-bell"></i>
             </Link>
-            <a href="javascript:;" className="mr-2">
+            <a href="" className="mr-2">
                 <i className="fas fa-pen"></i>
             </a>
-            <a href="javascript:;" className="">
+            <a href="" className="">
                 <i className="fas fa-times"></i>
             </a>
         </div>

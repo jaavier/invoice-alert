@@ -10,6 +10,7 @@ import deleteAlert from '../../../helpers/requests/deleteAlert';
 import Notification from '../../../helpers/Notification';
 import useNotification from '../../../hooks/useNotification';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
+import useApi from '../../../hooks/useApi';
 
 export default function ModifyAlert() {
 	const notification = useNotification({});
@@ -21,7 +22,7 @@ export default function ModifyAlert() {
 	const statusOptions = alertStatuses
 		.filter(({ text }) => text !== 'All')
 		.map(({ status: value, text: label }) => ({ value, label }))
-
+	const { put, response: alert } = useApi('alerts');
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
@@ -29,15 +30,30 @@ export default function ModifyAlert() {
 			return;
 		}
 		try {
-			await modifyAlert({
-				alertId, since, until, message, status
-			});
+			put(alertId, {
+				since,
+				until,
+				message,
+				status,
+			})
 			notification.update({ text: 'Alert modified successfully!', type: 'success' });
+
 		} catch (error) {
 			console.log(error);
 			notification.update({ text: "Something went wrong", type: 'error' });
 		}
 	}
+	// const saveAlert = async () => {
+	// 	try {
+	// 		await modifyAlert({
+	// 			alertId, since, until, message, status
+	// 		});
+	// 		notification.update({ text: 'Alert modified successfully!', type: 'success' });
+	// 	} catch (error) {
+	// 		console.log(error);
+	// 		notification.update({ text: "Something went wrong", type: 'error' });
+	// 	}
+	// }
 
 	const handlerDeleteAlert = async (alertId, index) => {
 		if (window.confirm("Are you sure you want to delete this alert?")) {
