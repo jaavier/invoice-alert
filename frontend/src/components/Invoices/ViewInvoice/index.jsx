@@ -6,7 +6,8 @@ import useApi from '../../../hooks/useApi';
 
 export default function ViewInvoice() {
     const { invoiceId } = useParams();
-    const { get, response: invoice } = useApi('invoices');
+    const { get, responses } = useApi('invoices');
+    const invoice = responses.get;
 
     useEffect(() => {
         get(invoiceId);

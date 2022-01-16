@@ -14,15 +14,18 @@ router.get('/', async (req, res) => {
 	return res.json(invoices);
 });
 
-router.get('/:id/:property?', async (req, res) => {
-	const { id, property } = req.params;
-	const invoice = await Invoices.findOne({ id });
+router.get('/:id?/:status?/:limit?', async (req, res) => {
+	const filter = req.params;
+	const keys = Object.keys(filter);
+	keys.forEach((key) => {
+		if (!filter[key]) delete filter[key];
+	});
+	const invoice = await Invoices.findOne(filter);
 	if (invoice) return res.json(invoice[property] ? { property: invoice[property] } : invoice);
 	else return res.json({ message: 'Invoice not found' });
 });
 
 router.post('/', Validate('invoice'), async (req, res) => {
-	console.log('req.body', req.body);
 	try {
 		//
 		const invoice = new Invoices({
@@ -32,7 +35,8 @@ router.post('/', Validate('invoice'), async (req, res) => {
 			amount: req.body.amount,
 			issueDate: req.body.issueDate,
 			dueDate: req.body.dueDate,
-			clientId: 'get from session user'
+			clientId: 'get from session user',
+			status: 'pending'
 		});
 		await invoice.save();
 		return res.json({

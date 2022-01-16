@@ -8,7 +8,13 @@ import invoiceStatuses from '../../../hooks/useApi/invoiceStatuses';
 
 
 export default function ListInvoices(props) {
-	const { params, response: invoices } = useApi('invoices');
+	const { get, responses, queryString, addQueryString } = useApi('invoices');
+	const invoices = responses['get'];
+	useEffect(
+		() => {
+			get();
+		},
+		[queryString])
 
 	return (
 		<React.Fragment>
@@ -18,7 +24,7 @@ export default function ListInvoices(props) {
 						<h1 className="text-2xl text-white font-bold">Home</h1>
 					</div>
 					<div className="flex">
-						<Filters statuses={invoiceStatuses} status={params.status} setStatus={params.setStatus} />
+						<Filters statuses={invoiceStatuses} status={queryString.status} setStatus={addQueryString} />
 					</div>
 				</div>
 			</div>
@@ -28,13 +34,13 @@ export default function ListInvoices(props) {
 						: (
 							<div className="text-center text-white mt-2 font-semibold">
 								<Link to="/invoices/create">
-									Create your first <u>{params.status}</u> invoice
+									Create your first <u>{queryString.status}</u> invoice
 								</Link>
 							</div>
 						)}
 			</div>
 			<div className="mt-5">
-				<LimitPerPage limit={params.limit} setLimit={params.setLimit} />
+				<LimitPerPage limit={queryString.limit} setLimit={addQueryString} />
 			</div>
 		</React.Fragment>
 	);

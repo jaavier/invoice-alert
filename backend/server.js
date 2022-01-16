@@ -19,7 +19,7 @@ mongoose
 		app.use(express.json());
 		app.use(
 			cors({
-				origin: 'http://localhost:3001',
+				origin: 'http://localhost:3000',
 				optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 			})
 		);
@@ -30,6 +30,6 @@ mongoose
 			res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
 			next();
 		});
-		app.listen(3000, () => console.log('Server started on port 3000'));
+		app.listen(3002, () => console.log('Server started on port 3000'));
 	})
 	.catch((err) => console.log(err));

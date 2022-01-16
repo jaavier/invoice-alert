@@ -4,7 +4,6 @@ const Alerts = require('../models/Alerts');
 const Invoices = require('../models/Invoices');
 const Validate = require('../middlewares/Validate');
 const { v4: uuid } = require('uuid');
-
 const cron = require('../cron');
 cron(Alerts);
 
@@ -50,15 +49,19 @@ router.post('/', Validate('alert'), async (req, res) => {
 });
 
 router.put('/:alertId', async (req, res) => {
-	const alert = await Alerts.findOne({ id: req.params.alertId });
-	if (!alert) return res.json({ message: 'Alert not found' });
-	const { since, until, message, status } = req.body;
-	alert.status = status;
-	alert.since = since;
-	alert.until = until;
-	alert.message = message;
-	await alert.save();
-	return res.json({ message: 'Alert updated successfully' });
+	try {
+		const alert = await Alerts.findOne({ id: req.params.alertId });
+		if (!alert) return res.json({ message: 'Alert not found' });
+		const { since, until, message, status } = req.body;
+		alert.status = status;
+		alert.since = since;
+		alert.until = until;
+		alert.message = message;
+		await alert.save();
+		return res.json({ message: 'Alert updated successfully' });
+	} catch (err) {
+		return res.status(400).json({ message: 'Error updating alert' });
+	}
 });
 
 router.post('/unlock/:alertId', async (req, res) => {

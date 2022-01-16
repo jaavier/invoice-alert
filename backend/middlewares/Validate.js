@@ -2,6 +2,7 @@ const rules = require('./rules');
 
 module.exports = (ruleType) =>
 	function(req, res, next) {
+		console.log('req.body X', req.body);
 		const keys = Object.keys(rules[ruleType]);
 		if (keys.length === 0) {
 			return next();

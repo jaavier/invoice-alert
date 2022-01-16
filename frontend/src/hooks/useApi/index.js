@@ -1,69 +1,54 @@
 import { useState, useEffect } from 'react';
+import headers from './headers';
 
 const baseUrl = 'http://localhost:3000/api';
-const headers = {
-	get: {},
-	post: {
-		'Content-Type': 'application/json'
-	},
-	put: {
-		'Content-Type': 'application/json'
-	},
-	delete: {}
-};
+
 export default function useApi(resource) {
-	const [ id, setId ] = useState('');
-	const [ status, setStatus ] = useState('');
-	const [ limit, setLimit ] = useState('');
+	const [ queryString, setQueryString ] = useState({});
+	const [ refresh, setRefresh ] = useState(false);
 	const [ responses, setResponses ] = useState({
 		remove: '',
 		get: '',
 		post: '',
 		put: ''
 	});
-	const [ response, setResponse ] = useState('');
-	const connect = async ({ method, body, id }) => {
+
+	const addQueryString = ({ key, value }) => {
+		setRefresh(true);
+		setQueryString({ ...queryString, [key]: value });
+	};
+
+	const request = async ({ method, body, customHeaders }) => {
 		let url = baseUrl + '/' + resource;
-		if (!id) {
-			if (status && !limit) {
-				url += `?status=${status}`;
-			} else if (limit && !status) {
-				url += `?limit=${limit}`;
-			} else if (status && limit) {
-				url += `?status=${status}&limit=${limit}`;
-			}
-		} else {
-			url += `/${id}`;
+		const keys = Object.keys(queryString);
+		if (keys.length > 0) {
+			let qs = '?' + keys.map((key) => key + '=' + queryString[key]).join('&');
+			url += qs;
 		}
 		const response = await fetch(url, {
 			method,
-			headers: headers[method],
+			headers: { ...headers, ...customHeaders },
 			body: body ? JSON.stringify(body) : undefined
 		});
+		setRefresh(!refresh);
+		if (response.status !== 200) throw new Error('API Error');
 		const json = await response.json();
-		setResponse(json);
 		setResponses({ ...responses, [method]: json });
+		return json;
 	};
 
-	const remove = async (id) => await connect({ method: 'delete', id });
-	const get = async (id) => await connect({ method: 'get', id });
-	const post = async (body) => await connect({ method: 'post', body });
-	const put = async (id, body) => await connect({ method: 'put', id, body });
-
-	useEffect(
-		() => {
-			get(id);
-		},
-		[ responses['delete'], status, limit ]
-	);
+	const remove = async (params) => await request({ method: 'delete', ...params });
+	const get = async (params) => await request({ method: 'get', ...params });
+	const post = async (params) => await request({ method: 'post', ...params });
+	const put = async (params) => await request({ method: 'put', ...params });
 
 	return {
 		remove,
 		get,
 		post,
 		put,
-		response,
 		responses,
-		params: { id, setId, status, setStatus, limit, setLimit }
+		queryString,
+		addQueryString
 	};
 }

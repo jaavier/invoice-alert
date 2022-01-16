@@ -1,10 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 export default function SiderbarDark() {
     const [menu, setMenu] = React.useState();
-
-    return <div className="w-1/6 bg-slate-900 text-white h-screen">
+    const isPublic = useLocation().pathname.includes('public');
+    return !isPublic && <div className="bg-slate-900 min-h-screen w-1/5 text-white">
         <div className="bg-gray-700 p-4">
             <h1 className="text-center text-2xl">Welcome</h1>
         </div>

@@ -4,9 +4,7 @@ import { useParams } from 'react-router-dom';
 import useInvoice from '../../../hooks/useInvoice';
 
 export default function InvoiceDetails(props) {
-    const { invoiceId } = useParams();
-    const [invoice, error] = useInvoice(invoiceId);
-
+    const { invoice } = props
     return (
         <div>
             <div className="py-4">

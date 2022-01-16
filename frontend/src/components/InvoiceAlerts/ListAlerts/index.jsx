@@ -1,22 +1,20 @@
 import React, { useEffect } from 'react';
-import loadAlerts from '../../../helpers/requests/loadAlerts';
 import { DateTime } from 'luxon';
-import deleteAlert from '../../../helpers/requests/deleteAlert';
-import Notification from '../../../helpers/Notification';
-import useNotification from '../../../hooks/useNotification';
 import { Link } from 'react-router-dom';
 import Filters from '../../../helpers/Tables/Filters';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import LimitPerPage from '../../../helpers/Tables/LimitPerPage';
 import useApi from '../../../hooks/useApi';
+import { useNotification } from '../../../contexts/useNotification';
 
 export default function ListAlerts(props) {
-    const notification = useNotification({});
+    const { addNotification } = useNotification();
     const { get, remove, params, responses } = useApi('alerts');
 
     const handlerDeleteAlert = async (alertId, index) => {
         if (window.confirm("Do you want to delete this alert? ")) {
             await remove(alertId);
+            addNotification({ text: "Alert deleted successfully!", type: "success" });
         }
     }
 
@@ -88,11 +86,6 @@ export default function ListAlerts(props) {
                     </div>
                         : null
                 }
-                <div className="mt-3">
-                    {
-                        !notification.hide && <Notification notification={notification} />
-                    }
-                </div>
             </div>
             <div className="mt-5">
                 <LimitPerPage limit={params.limit} setLimit={params.setLimit} />

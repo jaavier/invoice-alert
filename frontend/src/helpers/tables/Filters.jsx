@@ -11,7 +11,7 @@ export default function Filters({ statuses, status, setStatus }) {
                         <Button
                             type={s.type}
                             text={s.text}
-                            onClick={() => setStatus(s.status)}
+                            onClick={() => setStatus({ key: 'status', value: s.status })}
                             size={1}
                             pressed={status === s.status} />
                     </div>

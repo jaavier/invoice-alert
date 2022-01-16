@@ -1,36 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
+import useApi from '../../../hooks/useApi';
+import { useNotification } from '../../../contexts/useNotification';
 
 export default function CreateInvoice() {
+    const { post, responses } = useApi('invoices');
+    const { addNotification } = useNotification()
     const [receiver, setReceiver] = useState("");
     const [amount, setAmount] = useState("");
     const [sheetNumber, setSheetNumber] = useState("");
     const [issueDate, setIssueDate] = useState("");
     const [dueDate, setDueDate] = useState("");
-    const [status, setStatus] = useState(0);
-    const [uuid, setUuid] = useState("");
     const createInvoice = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:3000/api/invoices', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
+            const json = await post(
+                {
                     receiver,
                     amount: parseFloat(amount),
                     sheetNumber: parseFloat(sheetNumber),
                     issueDate: DateTime.fromISO(issueDate),
                     dueDate: DateTime.fromISO(dueDate),
-                })
-            });
-            const json = await response.json();
-            if (json.uuid)
-                window.location.href = '/invoices'
+                }, {
+                'Content-Type': 'application/json',
+            }
+            )
+            addNotification({
+                text: "Invoice created successfully",
+                type: "success",
+                timeout: 3000
+            })
         } catch (error) {
-            console.log(error);
-            setStatus(2);
+            console.log("🚀 ~ file: index.jsx ~ line 35 ~ createInvoice ~ error", error)
+            addNotification({
+                text: error.message,
+                type: "danger",
+            })
         }
     }
 
@@ -110,8 +115,6 @@ export default function CreateInvoice() {
                     </div>
                 </form>
             </div>
-            {status === 1 && <p>Invoice created successfully - {uuid}</p>}
-            {status === 2 && <p>Error creating invoice</p>}
         </React.Fragment>
     );
 }

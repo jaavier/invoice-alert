@@ -3,17 +3,13 @@ import { useParams } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import Input from '../../Forms/Input';
 import Button from '../../Forms/Button';
-import loadAlerts from '../../../helpers/requests/loadAlerts';
-import modifyAlert from '../../../helpers/requests/modifyAlert';
 import Dropdown from '../../Forms/Dropdown';
-import deleteAlert from '../../../helpers/requests/deleteAlert';
-import Notification from '../../../helpers/Notification';
-import useNotification from '../../../hooks/useNotification';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import useApi from '../../../hooks/useApi';
+import { useNotification } from '../../../contexts/useNotification';
 
 export default function ModifyAlert() {
-	const notification = useNotification({});
+	const { addNotification } = useNotification();
 	const { alertId } = useParams();
 	const [since, setSince] = React.useState("");
 	const [until, setUntil] = React.useState("");
@@ -22,56 +18,43 @@ export default function ModifyAlert() {
 	const statusOptions = alertStatuses
 		.filter(({ text }) => text !== 'All')
 		.map(({ status: value, text: label }) => ({ value, label }))
-	const { put, response: alert } = useApi('alerts');
+	const { get, put, remove, response: alert } = useApi('alerts');
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
-			notification.update({ text: "Please fill in all fields", type: "error" });
+			addNotification({ text: "Please fill in all fields", type: "error" });
 			return;
 		}
 		try {
-			put(alertId, {
-				since,
-				until,
-				message,
-				status,
+			await put(alertId, {
+				since, until, message, status
+			}, {
+				'Content-Type': 'application/json',
 			})
-			notification.update({ text: 'Alert modified successfully!', type: 'success' });
+			addNotification({ text: 'Alert modified successfully!', type: 'success' });
 
 		} catch (error) {
 			console.log(error);
-			notification.update({ text: "Something went wrong", type: 'error' });
+			addNotification({ text: error.message, type: 'error' });
 		}
 	}
-	// const saveAlert = async () => {
-	// 	try {
-	// 		await modifyAlert({
-	// 			alertId, since, until, message, status
-	// 		});
-	// 		notification.update({ text: 'Alert modified successfully!', type: 'success' });
-	// 	} catch (error) {
-	// 		console.log(error);
-	// 		notification.update({ text: "Something went wrong", type: 'error' });
-	// 	}
-	// }
 
 	const handlerDeleteAlert = async (alertId, index) => {
 		if (window.confirm("Are you sure you want to delete this alert?")) {
-			deleteAlert(alertId)
+			remove(alertId)
 				.then(data => {
 					alert("Alert deleted successfully!");
 					window.location.href = "/alerts";
 				})
 				.catch(error => {
-					notification.update({ text: error.message, type: 'error' });
+					addNotification({ text: error.message, type: 'error' });
 				})
 		}
 	};
 
 	React.useEffect(() => {
-		loadAlerts(alertId)
+		get(alertId)
 			.then(alert => {
-				console.log("🚀 ~ file: index.jsx ~ line 71 ~ React.useEffect ~ alert", alert)
 				const since = DateTime.fromISO(alert.since).toFormat('yyyy-MM-dd');
 				const until = DateTime.fromISO(alert.until).toFormat('yyyy-MM-dd');
 				setSince(since);
@@ -80,7 +63,7 @@ export default function ModifyAlert() {
 				setStatus(alert.status);
 			})
 			.catch(err => {
-				notification.update({ text: "Something went wrong while loading alert information", type: 'error' });
+				addNotification({ text: "Something went wrong while loading alert information", type: 'error' });
 			})
 	}, [])
 
@@ -103,9 +86,6 @@ export default function ModifyAlert() {
 					<div className="mr-2">
 						<Button text="Delete" onClick={() => handlerDeleteAlert(alertId)} />
 					</div>
-				</div>
-				<div className="w-full mt-5">
-					<Notification notification={notification} />
 				</div>
 			</React.Fragment>
 		</div>

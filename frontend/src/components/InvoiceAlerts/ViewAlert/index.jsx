@@ -1,12 +1,11 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import loadAlerts from '../../../helpers/requests/loadAlerts';
-import unlockAlert from '../../../helpers/requests/unlockAlert';
+import useApi from '../../../hooks/useApi';
 import InvoiceDetails from '../CreateAlert/InvoiceDetails';
 
 const ShowAlert = ({ data }) => {
-    console.log("🚀 ~ file: index.jsx ~ line 9 ~ ShowAlert ~ data", data)
     if (!data || !data.alert) return null
+    console.log('data.invoice', data.invoice)
     return (
         <div>
             <div className="mb-5">
@@ -55,13 +54,15 @@ const AlertError = () => {
 
 export default function ViewAlert() {
     const { alertId, password } = useParams();
+    const { post, responses } = useApi('alerts/unlock/' + alertId);
     const [data, setData] = React.useState();
     const [error, setError] = React.useState();
     const [height, setHeight] = React.useState('full')
 
     React.useEffect(() => {
         if (alertId && password) {
-            unlockAlert(alertId, password).then(data => {
+            post({ password }).then(data => {
+                console.log("🚀 ~ file: index.jsx ~ line 65 ~ post ~ data", data)
                 setData(data);
             }).catch(e => {
                 setError(e);

@@ -4,13 +4,16 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { InvoicesProvider } from './contexts/invoices';
 import { CreateAlertProvider } from './contexts/createAlert';
+import { NotificationProvider } from './contexts/useNotification';
 import { render } from 'react-dom';
 
 render(
 	<React.StrictMode>
 		<InvoicesProvider>
 			<CreateAlertProvider>
-				<App />
+				<NotificationProvider>
+					<App />
+				</NotificationProvider>
 			</CreateAlertProvider>
 		</InvoicesProvider>
 	</React.StrictMode>,

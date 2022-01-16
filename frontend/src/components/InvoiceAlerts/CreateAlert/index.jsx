@@ -1,37 +1,46 @@
 import React, { useState, useEffect } from 'react';
-import createAlert from '../../../helpers/requests/createAlert';
 import { useParams } from 'react-router-dom';
 import InvoiceDetails from './InvoiceDetails';
 import Dropdown from '../../Forms/Dropdown';
-import Notification from '../../../helpers/Notification';
-import useNotification from '../../../hooks/useNotification';
+import { useNotification } from '../../../contexts/useNotification';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
+import useApi from '../../../hooks/useApi';
 
 export default function CreateAlert() {
     const { invoiceId } = useParams();
     if (!invoiceId) window.location.href = "/"
+    const { post } = useApi('alerts');
+    const invoices = useApi('invoices');
     const [since, setSince] = React.useState('');
     const [until, setUntil] = React.useState('');
     const [message, setMessage] = React.useState('');
     const [status, setStatus] = React.useState('');
-    const notification = useNotification({ hide: true });
+    const { addNotification } = useNotification();
     const statusesList = alertStatuses
         .filter(({ text }) => text !== 'All')
         .map(({ status: value, text: label }) => ({ value, label }))
 
-    const onSubmit = (e) => {
+    const onSubmit = async (e) => {
         e.preventDefault();
-        createAlert({ invoiceId, since, until, message, status })
+        post({ invoiceId, since, until, message, status }, {
+            'Content-Type': 'application/json'
+        })
             .then(data => {
-                notification.update({ text: "Alert created successfully!", type: "success" });
+                addNotification({ text: "Alert created successfully!", type: "success" });
                 setSince("");
                 setUntil("");
                 setMessage("");
                 setStatus("pending");
             }).catch(error => {
-                notification.update({ text: "Something went wrong!", type: "error" });
+                console.log("🚀 ~ file: index.jsx ~ line 34 ~ onSubmit ~ error", error)
+                addNotification({ text: "Something went wrong!", type: "error" });
             })
     }
+
+    useEffect(() => {
+        invoices.get(invoiceId)
+    }, [])
+
     return (
         <React.Fragment>
             <div className="flex">
@@ -83,11 +92,8 @@ export default function CreateAlert() {
                     </form>
                 </div>
                 <div className="w-2/3 px-4">
-                    <InvoiceDetails />
+                    <InvoiceDetails invoice={invoices.responses.get} />
                 </div>
-            </div>
-            <div className="w-full mt-5">
-                <Notification notification={notification} />
             </div>
         </React.Fragment>
     );
