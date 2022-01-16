@@ -30,6 +30,6 @@ mongoose
 			res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type'); // If needed
 			next();
 		});
-		app.listen(3002, () => console.log('Server started on port 3000'));
+		app.listen(3002, () => console.log('Server started on port 3002'));
 	})
 	.catch((err) => console.log(err));

@@ -17,11 +17,19 @@ router.get('/', async (req, res) => {
 router.get('/:id?/:status?/:limit?', async (req, res) => {
 	const filter = req.params;
 	const keys = Object.keys(filter);
+	const limit = req.params.limit ? parseInt(req.params.limit) : 100;
+	const bannedWords = [ 'limit' ];
+	const checkKey = (key) => {
+		if (bannedWords.indexOf(key) !== -1) return true;
+		if (!filter[key]) return true;
+		if (filter[key] === 'all') return true;
+		return false;
+	};
 	keys.forEach((key) => {
-		if (!filter[key]) delete filter[key];
+		if (checkKey(key)) delete filter[key];
 	});
-	const invoice = await Invoices.findOne(filter);
-	if (invoice) return res.json(invoice[property] ? { property: invoice[property] } : invoice);
+	const invoice = await Invoices.find(filter).limit(limit);
+	if (invoice) return res.json(invoice);
 	else return res.json({ message: 'Invoice not found' });
 });
 

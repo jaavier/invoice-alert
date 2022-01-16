@@ -8,7 +8,7 @@ export default function LimitPerPage({ limit, setLimit }) {
                     placeholder="Limit"
                     value={limit}
                     onChange={(e) =>
-                        setLimit({ key: 'limit', value: e.target.value })}
+                        setLimit(e.target.value)}
                     className="p-1 rounded-lg"
                 />
             </div>

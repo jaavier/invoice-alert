@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import { Link } from 'react-router-dom';
 import Filters from '../../../helpers/Tables/Filters';
@@ -9,7 +9,9 @@ import { useNotification } from '../../../contexts/useNotification';
 
 export default function ListAlerts(props) {
     const { addNotification } = useNotification();
-    const { get, remove, params, responses } = useApi('alerts');
+    const { get, remove, responses } = useApi('alerts');
+    const [status, setStatus] = useState('pending');
+    const [limit, setLimit] = useState(100);
 
     const handlerDeleteAlert = async (alertId, index) => {
         if (window.confirm("Do you want to delete this alert? ")) {
@@ -20,9 +22,12 @@ export default function ListAlerts(props) {
 
     useEffect(
         () => {
-            get();
+            get({
+                params: { all: 'all', status, limit }
+            });
+            console.log('responses.get', responses.get)
         },
-        [responses['delete'], params.status, params.limit]
+        [responses['delete'], status, limit]
     );
 
 
@@ -34,7 +39,7 @@ export default function ListAlerts(props) {
                         <h1 className="text-2xl text-white font-bold">Alerts</h1>
                     </div>
                     <div className="flex">
-                        <Filters statuses={alertStatuses} status={params.status} setStatus={params.setStatus} />
+                        <Filters statuses={alertStatuses} status={status} setStatus={setStatus} />
                     </div>
                 </div>
             </div>
@@ -52,7 +57,7 @@ export default function ListAlerts(props) {
                         </tr>
                     </thead>
                     <tbody className="bg-slate-900">
-                        {responses['get'].length > 0 ? responses['get'].map((alert, index) => (
+                        {responses['get'] && responses['get'].length > 0 ? responses['get'].map((alert, index) => (
                             <tr key={index} className="h-12 border-b-2">
                                 <td>{index + 1}</td>
                                 <td><Link to={`/invoices/${alert.invoiceId}`} className="underline">View #{alert.sheetNumber}</Link></td>
@@ -81,14 +86,14 @@ export default function ListAlerts(props) {
                 {
                     responses['get'].length === 0 ? <div className="text-center text-white mt-2 font-semibold">
                         <Link to="/alerts">
-                            Create your first <u>{params.status}</u> alert
+                            Create your first <u>{status}</u> alert
                         </Link>
                     </div>
                         : null
                 }
             </div>
             <div className="mt-5">
-                <LimitPerPage limit={params.limit} setLimit={params.setLimit} />
+                <LimitPerPage limit={limit} setLimit={setLimit} />
             </div>
 
         </React.Fragment>

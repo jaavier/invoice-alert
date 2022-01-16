@@ -17,6 +17,6 @@ export default [
 	{
 		type: 'info',
 		text: 'All',
-		status: ''
+		status: 'all'
 	}
 ];

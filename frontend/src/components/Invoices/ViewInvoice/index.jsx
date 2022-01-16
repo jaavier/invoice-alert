@@ -10,7 +10,9 @@ export default function ViewInvoice() {
     const invoice = responses.get;
 
     useEffect(() => {
-        get(invoiceId);
+        get({
+            params: { invoiceId }
+        });
     }, [])
 
     return (
@@ -19,7 +21,7 @@ export default function ViewInvoice() {
                 invoice ? (
                     <div>
                         <h1 className="text-white text-3xl p-4">View Invoice</h1>
-                        <Invoices invoices={[invoice]} />
+                        <Invoices invoices={invoice} />
                     </div>
                 ) : "Not found"
             }

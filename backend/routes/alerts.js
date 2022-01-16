@@ -23,12 +23,23 @@ router.get('/', async (req, res) => {
 	return res.json(output);
 });
 
-router.get('/:id', async (req, res) => {
-	const alert = await Alerts.findOne({ id: req.params.id });
-	if (alert) {
+router.get('/:id?/:status?/:limit?', async (req, res) => {
+	const { id, status, limit = 100 } = req.params;
+	const filter = {};
+	if (id && id !== 'all') filter.id = id;
+	if (status) filter.status = status;
+	console.log('🚀 ~ file: alerts.js ~ line 31 ~ router.get ~ filter', filter);
+	const alerts = await Alerts.find(filter).limit(limit).sort({ createdAt: -1 });
+	if (alerts.length === 0) return res.status(404).json([]);
+	let output = [];
+	for (const alert of alerts) {
 		const invoice = await Invoices.findOne({ id: alert.invoiceId });
-		return res.json({ ...alert._doc, sheetNumber: invoice.sheetNumber });
-	} else return res.status(404).json({ message: 'Alert not found' });
+		output.push({
+			...alert._doc,
+			sheetNumber: invoice.sheetNumber
+		});
+	}
+	return res.json(output);
 });
 
 router.post('/', Validate('alert'), async (req, res) => {

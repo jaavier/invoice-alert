@@ -18,42 +18,47 @@ export default function ModifyAlert() {
 	const statusOptions = alertStatuses
 		.filter(({ text }) => text !== 'All')
 		.map(({ status: value, text: label }) => ({ value, label }))
-	const { get, put, remove, response: alert } = useApi('alerts');
+	const { get, put, remove } = useApi('alerts');
+	const timeout = 5000;
 
 	const saveAlert = async () => {
 		if (!since || !until || !message) {
-			addNotification({ text: "Please fill in all fields", type: "error" });
+			addNotification({ text: "Please fill in all fields", type: "error", timeout });
 			return;
 		}
 		try {
-			await put(alertId, {
-				since, until, message, status
-			}, {
-				'Content-Type': 'application/json',
+			await put({
+				params: { alertId },
+				body: { since, until, message, status },
+				customHeaders: { 'Content-Type': 'application/json' }
 			})
-			addNotification({ text: 'Alert modified successfully!', type: 'success' });
+			addNotification({ text: 'Alert modified successfully!', type: 'success', timeout });
 
 		} catch (error) {
 			console.log(error);
-			addNotification({ text: error.message, type: 'error' });
+			addNotification({ text: error.message, type: 'error', timeout });
 		}
 	}
 
 	const handlerDeleteAlert = async (alertId, index) => {
 		if (window.confirm("Are you sure you want to delete this alert?")) {
-			remove(alertId)
+			remove({
+				params: { alertId },
+			})
 				.then(data => {
 					alert("Alert deleted successfully!");
 					window.location.href = "/alerts";
 				})
 				.catch(error => {
-					addNotification({ text: error.message, type: 'error' });
+					addNotification({ text: error.message, type: 'error', timeout });
 				})
 		}
 	};
 
 	React.useEffect(() => {
-		get(alertId)
+		get({
+			params: { alertId }
+		})
 			.then(alert => {
 				const since = DateTime.fromISO(alert.since).toFormat('yyyy-MM-dd');
 				const until = DateTime.fromISO(alert.until).toFormat('yyyy-MM-dd');
@@ -63,7 +68,7 @@ export default function ModifyAlert() {
 				setStatus(alert.status);
 			})
 			.catch(err => {
-				addNotification({ text: "Something went wrong while loading alert information", type: 'error' });
+				addNotification({ text: "Something went wrong while loading alert information", type: 'error', timeout });
 			})
 	}, [])
 
