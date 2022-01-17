@@ -15,7 +15,7 @@ export default function CreateContact(props) {
     const [state, setState] = React.useState('');
     const [zip, setZip] = React.useState('');
     const [country, setCountry] = React.useState('');
-    const { post, responses, error } = useApi('contacts');
+    const { post } = useApi('contacts');
     const { addNotification } = useNotification();
 
     const handleSubmit = (e) => {
@@ -48,17 +48,17 @@ export default function CreateContact(props) {
         </div>
         <div className="w-full">
             <form onSubmit={handleSubmit}>
-                <div className="flex flex-wrap -mx-3 mb-3 px-2 w-full">
+                <div className="flex flex-wrap -mx-3 mb-2">
                     <Input label="Name" type="text" placeholder="Name" value={name} setValue={setName} />
                     <Input label="Email" type="email" placeholder="Email" value={email} setValue={setEmail} />
                     <Input label="Phone" type="text" placeholder="Phone" value={phone} setValue={setPhone} />
+                    <Dropdown label="Country" options={countries} value={country} setValue={setCountry} size="1/3" />
                     <Input label="Address" type="text" placeholder="Address" value={address} setValue={setAddress} />
                     <Input label="City" type="text" placeholder="City" value={city} setValue={setCity} />
                     <Input label="State" type="text" placeholder="State" value={state} setValue={setState} />
                     <Input label="Zip" type="text" placeholder="Zip" value={zip} setValue={setZip} />
-                    <Dropdown label="Country" options={countries} value={country} setValue={setCountry} size="1/3" />
                 </div>
-                <div className="w-full mb-3 px-2">
+                <div className="w-full mb-3">
                     <Button type="primary" text="Save Contact" />
                 </div>
             </form>

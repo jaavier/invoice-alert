@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import useApi from '../../../hooks/useApi';
 import useNotification from '../../../hooks/useNotification';
+import Input from '../../Forms/Input';
 
 export default function CreateInvoice() {
     const { post } = useApi('invoices');
@@ -46,72 +47,22 @@ export default function CreateInvoice() {
             </div>
             <div className="">
                 <form onSubmit={createInvoice}>
-                    <div className="flex flex-wrap -mx-3 mb-4">
-                        <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                            <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
-                                Receiver
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="text"
-                                value={receiver}
-                                onChange={(e) => setReceiver(e.target.value)}
-                            />
-                        </div>
-                        <div className="w-full md:w-1/2 px-3">
-                            <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                                Sheet Number
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="number"
-                                value={sheetNumber}
-                                onChange={(e) => setSheetNumber(e.target.value)}
-                            />
-                        </div>
-                        <div className="w-full mt-4 md:w-full px-3">
-                            <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                                Amount
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="number"
-                                value={amount}
-                                onChange={(e) => setAmount(e.target.value)}
-                            />
-                        </div>
-                        <div className="w-full mt-4 md:w-full px-3">
-                            <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                                Issue Date
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="date"
-                                value={issueDate}
-                                onChange={(e) => setIssueDate(e.target.value)}
-                            />
-                        </div>
-                        <div className="w-full mt-4 md:w-full px-3">
-                            <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-last-name">
-                                Due Date
-                            </label>
-                            <input
-                                className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                                type="date"
-                                value={dueDate}
-                                onChange={(e) => setDueDate(e.target.value)}
-                            />
+                    <div className="-mx-3 mb-2">
+                        <div className="flex flex-wrap w-full md:w-full mb-6 md:mb-0">
+                            <Input label="Receiver" type="text" placeholder="Receiver" value={receiver} setValue={setReceiver} size="1/2" />
+                            <Input label="Sheet Number" type="text" placeholder="Sheet Number" value={sheetNumber} setValue={setSheetNumber} size="1/2" />
+                            <Input label="Issue Date" type="date" placeholder="Issue Date" value={issueDate} setValue={setIssueDate} size="1/2" />
+                            <Input label="Due Date" type="date" placeholder="Due Date" value={dueDate} setValue={setDueDate} size="1/2" />
+                            <Input label="Amount" type="text" placeholder="Amount" value={amount} setValue={setAmount} size="1/2" />
                         </div>
                     </div>
-                    <div className="flex flex-wrap -mx-3">
-                        <div className="w-full md:w-full px-3 md:mb-0">
-                            <button
-                                className="shadow bg-white hover:bg-gray-100 focus:shadow-outline focus:outline-none text-gray-800 font-bold py-2 px-4 rounded"
-                                type="submit"
-                            >
-                                Create Invoice
-                            </button>
-                        </div>
+                    <div className="w-full md:w-full md:mb-0">
+                        <button
+                            className="shadow bg-white hover:bg-gray-100 focus:shadow-outline focus:outline-none text-gray-800 font-bold py-2 px-4 rounded"
+                            type="submit"
+                        >
+                            Create Invoice
+                        </button>
                     </div>
                 </form>
             </div>

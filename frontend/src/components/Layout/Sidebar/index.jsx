@@ -47,13 +47,28 @@ export default function SiderbarDark() {
                     )
                 }
             </li>
-            <li className="py-2">
-                <Link
-                    to="/contacts"
+
+            <li
+                onClick={() => setMenu(menu === 'contacts' ? null : 'contacts')}
+                className="py-2"
+            >
+                <button
                     className="text-white text-sm font-semibold"
                 >
                     Contacts
-                </Link>
+                </button>
+                {
+                    menu === 'contacts' && (
+                        <ul className="px-4">
+                            <li className="text-white text-sm pt-2 font-semibold">
+                                <Link to="/contacts">View All</Link>
+                            </li>
+                            <li className="text-white text-sm pt-2 font-semibold">
+                                <Link to="/contacts/create">Create Contact</Link>
+                            </li>
+                        </ul>
+                    )
+                }
             </li>
             <li className="py-2">
                 <Link

@@ -37,7 +37,10 @@ export default function useApi(resource) {
 			headers: { ...headers, ...customHeaders[method] },
 			body: body ? JSON.stringify(body) : undefined
 		});
-		if (response.status !== 200) throw new Error(response.statusText);
+		if (response.status !== 200) {
+			setError(!error);
+			throw new Error(response.statusText);
+		}
 		setStatusCode({ ...statusCode, [method]: response.status });
 		const json = await response.json();
 		setResponses({ ...responses, [method]: json });

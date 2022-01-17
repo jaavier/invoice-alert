@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function Input({ label, type, placeholder, value, setValue }) {
+export default function Input({ label, type, placeholder, value, setValue, size = "1/3" }) {
     return (
-        <div className="w-full md:w-1/3 px-3 md:mb-0">
+        <div className={`w-full md:w-${size} px-3 md:mb-0`}>
             <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
                 {label}
             </label>

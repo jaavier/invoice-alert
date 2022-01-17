@@ -38,4 +38,24 @@ router.post('/', Validate('contact'), async (req, res) => {
 	}
 });
 
+router.delete('/:contactId', async (req, res) => {
+	const { contactId } = req.params;
+	try {
+		const contact = await Contact.findOneAndDelete({ id: contactId });
+		if (!contact) {
+			return res.status(404).json({
+				message: 'Client not found'
+			});
+		}
+		return res.json({
+			message: 'Client deleted successfully'
+		});
+	} catch (e) {
+		console.log('Error deleting client:', e);
+		return res.status(400).json({
+			message: 'Error deleting client'
+		});
+	}
+});
+
 module.exports = router;
