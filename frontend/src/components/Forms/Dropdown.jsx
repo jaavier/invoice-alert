@@ -1,6 +1,13 @@
 import React from 'react';
 
 export default function Dropdown({ label, options, value, setValue, size = "1/2" }) {
+    options = [{
+        value: 'Select one',
+        label: 'Select one',
+        selected: true,
+        hidden: true
+    },
+    ...options]
     return (
         <div className={`w-full md:w-${size} px-3 md:mb-0`}>
             <label className="block uppercase tracking-wide text-white text-xs font-bold mb-2" htmlFor="grid-first-name">
@@ -13,7 +20,7 @@ export default function Dropdown({ label, options, value, setValue, size = "1/2"
                     value={value}
                 >
                     {options.map((option) => (
-                        <option key={option.value} value={option.value}>
+                        <option key={option.value} {...option}>
                             {option.label}
                         </option>
                     ))}

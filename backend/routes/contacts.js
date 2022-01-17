@@ -1,16 +1,18 @@
 const Contact = require('../models/Contacts');
 const { Router } = require('express');
 const router = Router();
+const Validate = require('../middlewares/Validate');
+const { v4: uuid } = require('uuid');
 
-router.get('/:contactId?', (req, res) => {
+router.get('/:contactId?', async (req, res) => {
 	const { contactId } = req.params;
 	const filter = {};
 	if (contactId) filter._id = contactId;
-	const contacts = Contact.find(filter);
+	const contacts = await Contact.find(filter);
 	return res.json(contacts);
 });
 
-router.post('/', async (req, res) => {
+router.post('/', Validate('contact'), async (req, res) => {
 	try {
 		const contact = new Contact({
 			id: uuid(),
@@ -20,7 +22,8 @@ router.post('/', async (req, res) => {
 			address: req.body.address,
 			city: req.body.city,
 			state: req.body.state,
-			zip: req.body.zip
+			zip: req.body.zip,
+			country: req.body.country
 		});
 		await contact.save();
 		return res.json({
@@ -29,7 +32,7 @@ router.post('/', async (req, res) => {
 		});
 	} catch (e) {
 		console.log('Error saving client:', e);
-		return res.json({
+		return res.status(400).json({
 			message: 'Error saving client'
 		});
 	}

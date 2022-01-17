@@ -10,6 +10,7 @@ import Contacts from './components/Contacts';
 import Container from './components/Layout/Container';
 import Sidebar from './components/Layout/Sidebar';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import CreateContact from './components/Contacts/CreateContact';
 
 function App() {
 	return (
@@ -23,6 +24,8 @@ function App() {
 						<Route path="/contacts" element={<Contacts />} />
 						<Route path="/invoices/:invoiceId" element={<ViewInvoice />} />
 						<Route path="/invoices/create" element={<CreateInvoice />} />
+						<Route path="/contacts" element={<Contacts />} />
+						<Route path="/contacts/create" element={<CreateContact />} />
 						<Route path="/alerts" element={<ListAlerts />} />
 						<Route path="/alerts/create" element={<Navigate replace to="/" />} />
 						<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />
