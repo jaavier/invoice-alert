@@ -2,8 +2,11 @@ const Contact = require('../models/Contacts');
 const { Router } = require('express');
 const router = Router();
 
-router.get('/', (req, res) => {
-	const contacts = Contact.find();
+router.get('/:contactId?', (req, res) => {
+	const { contactId } = req.params;
+	const filter = {};
+	if (contactId) filter._id = contactId;
+	const contacts = Contact.find(filter);
 	return res.json(contacts);
 });
 
