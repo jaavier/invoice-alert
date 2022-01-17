@@ -20,9 +20,6 @@ export default function ListInvoices(props) {
 					all: 'all',
 					status,
 					limit
-				},
-				queryString: {
-					name: status
 				}
 			});
 		},
