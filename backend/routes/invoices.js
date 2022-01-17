@@ -1,6 +1,6 @@
 const { v4: uuid } = require('uuid');
 const express = require('express');
-const Invoices = require('../models/Invoices');
+const Invoice = require('../models/Invoice');
 const router = express.Router();
 const Validate = require('../middlewares/Validate');
 const statusList = require('../constants/invoices/statusList');
@@ -10,7 +10,7 @@ router.get('/', async (req, res) => {
 	const { status } = req.query;
 	const limit = req.query.limit ? parseInt(req.query.limit) : 100;
 	if (statusList.indexOf(status) !== -1) filter.status = status;
-	const invoices = await Invoices.find(filter).limit(limit);
+	const invoices = await Invoice.find(filter).limit(limit);
 	return res.json(invoices);
 });
 
@@ -28,7 +28,7 @@ router.get('/:id?/:status?/:limit?', async (req, res) => {
 	keys.forEach((key) => {
 		if (checkKey(key)) delete filter[key];
 	});
-	const invoice = await Invoices.find(filter).limit(limit);
+	const invoice = await Invoice.find(filter).limit(limit);
 	if (invoice) return res.json(invoice);
 	else return res.json({ message: 'Invoice not found' });
 });
@@ -36,7 +36,7 @@ router.get('/:id?/:status?/:limit?', async (req, res) => {
 router.post('/', Validate('invoice'), async (req, res) => {
 	try {
 		//
-		const invoice = new Invoices({
+		const invoice = new Invoice({
 			id: uuid(),
 			sheetNumber: req.body.sheetNumber,
 			receiver: req.body.receiver,
@@ -60,7 +60,7 @@ router.post('/', Validate('invoice'), async (req, res) => {
 });
 
 router.put('/:id', Validate('invoice'), async (req, res) => {
-	await Invoices.updateOne({ id: req.params.id }, req.body);
+	await Invoice.updateOne({ id: req.params.id }, req.body);
 	return res.json({
 		message: 'Invoice updated successfully'
 	});

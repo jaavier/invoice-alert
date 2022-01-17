@@ -2,9 +2,8 @@ import React from 'react';
 
 export default function Dropdown({ label, options, value, setValue, size = "1/2" }) {
     options = [{
-        value: 'Select one',
+        value: '',
         label: 'Select one',
-        hidden: true
     },
     ...options]
     return (
@@ -16,7 +15,7 @@ export default function Dropdown({ label, options, value, setValue, size = "1/2"
                 <select
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) => setValue(e.target.value)}
-                    defaultValue='Select one'
+                    value={value}
                 >
                     {options.map((option) => (
                         <option key={option.value} {...option}>

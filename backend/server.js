@@ -5,7 +5,7 @@ const app = express();
 const cors = require('cors');
 const routes = require('./routes');
 const cron = require('./cron');
-const Alerts = require('./models/Alerts');
+const Alert = require('./models/Alert');
 
 dotenv.config();
 
@@ -15,7 +15,7 @@ mongoose
 		useUnifiedTopology: true
 	})
 	.then(() => {
-		cron(Alerts);
+		cron(Alert);
 		app.use(express.json());
 		app.use(
 			cors({

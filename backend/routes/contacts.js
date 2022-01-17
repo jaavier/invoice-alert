@@ -1,13 +1,17 @@
-const Contact = require('../models/Contacts');
+const Contact = require('../models/Contact');
+const Invoice = require('../models/Invoice');
 const { Router } = require('express');
 const router = Router();
 const Validate = require('../middlewares/Validate');
 const { v4: uuid } = require('uuid');
 
-router.get('/:contactId?', async (req, res) => {
-	const { contactId } = req.params;
+router.get('/:contactId?/:section?', async (req, res) => {
+	const { contactId, section } = req.params;
 	const filter = {};
 	if (contactId) filter.id = contactId;
+	if (section === 'invoices') {
+		const alerts = await Invoice.find({ contact: contactId });
+	}
 	const contacts = await Contact.find(filter);
 	if (contacts.length === 0) return res.status(404).json({ message: 'Contact not found' });
 	res.json(contacts);

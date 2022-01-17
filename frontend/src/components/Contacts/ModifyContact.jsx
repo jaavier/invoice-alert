@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Dropdown from '../Forms/Dropdown';
 import Input from '../Forms/Input';
 import Button from '../Forms/Button';
-import countries from './countries'
+import getCountries from './getCountries'
 import useApi from '../../hooks/useApi';
 import useNotification from '../../hooks/useNotification';
 import { useParams } from 'react-router-dom';
@@ -20,9 +20,14 @@ export default function CreateContact(props) {
     const [country, setCountry] = React.useState('');
     const { put } = useApi('contacts');
     const { addNotification } = useNotification();
+    const countries = getCountries();
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (!country) {
+            addNotification({ text: "Please select a country", type: "error" });
+            return;
+        }
         put({
             params: { contactId },
             body: {
