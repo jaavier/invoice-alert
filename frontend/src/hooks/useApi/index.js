@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import customHeaders from './customHeaders';
 
-const baseUrl = 'http://api.weatherstack.com';
+const baseUrl = 'http://localhost:3002/api';
 
 export default function useApi(resource) {
 	const [ responses, setResponses ] = useState({

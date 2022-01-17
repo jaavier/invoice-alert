@@ -4,7 +4,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { InvoicesProvider } from './contexts/invoices';
 import { CreateAlertProvider } from './contexts/createAlert';
-import { NotificationProvider } from './contexts/useNotification';
+import { NotificationProvider } from './contexts/notification';
 import { render } from 'react-dom';
 
 render(

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import Notification from '../../../contexts/Notification';
+import Notification from '../../../hooks/useNotification/Notification';
 
 export default function Home({ children }) {
     return (

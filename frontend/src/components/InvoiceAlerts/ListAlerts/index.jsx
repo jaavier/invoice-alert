@@ -25,12 +25,11 @@ export default function ListAlerts(props) {
     useEffect(
         () => {
             get({
-                params: { all: 'all', status, limit }
-            });
+                params: { all: 'all', status }
+            })
         },
         [responses['delete'], status, limit]
     );
-
 
     return (
         <React.Fragment>

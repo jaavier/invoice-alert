@@ -11,10 +11,11 @@ export default function CreateAlert() {
     if (!invoiceId) window.location.href = "/"
     const { post } = useApi('alerts');
     const invoices = useApi('invoices');
-    const [since, setSince] = React.useState('');
-    const [until, setUntil] = React.useState('');
-    const [message, setMessage] = React.useState('');
-    const [status, setStatus] = React.useState('');
+    const [invoice, setInvoice] = useState(null);
+    const [since, setSince] = useState('');
+    const [until, setUntil] = useState('');
+    const [message, setMessage] = useState('');
+    const [status, setStatus] = useState('');
     const { addNotification } = useNotification();
     const statusesList = alertStatuses
         .filter(({ text }) => text !== 'All')
@@ -22,8 +23,9 @@ export default function CreateAlert() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        post({ invoiceId, since, until, message, status }, {
-            'Content-Type': 'application/json'
+        post({
+            body: { invoiceId, since, until, message, status },
+            headers: { 'Content-Type': 'application/json' }
         })
             .then(data => {
                 addNotification({ text: "Alert created successfully!", type: "success" });
@@ -32,13 +34,20 @@ export default function CreateAlert() {
                 setMessage("");
                 setStatus("pending");
             }).catch(error => {
-                console.log("🚀 ~ file: index.jsx ~ line 34 ~ onSubmit ~ error", error)
                 addNotification({ text: "Something went wrong!", type: "error" });
             })
     }
 
     useEffect(() => {
-        invoices.get(invoiceId)
+        invoices.get({
+            params: { invoiceId }
+        }).then(invoices => {
+            console.log("🚀 ~ file: index.jsx ~ line 45 ~ useEffect ~ invoices", invoices)
+            if (invoices.length)
+                setInvoice(invoices[0]);
+            else
+                window.location.href = "/"
+        })
     }, [])
 
     return (
@@ -92,7 +101,7 @@ export default function CreateAlert() {
                     </form>
                 </div>
                 <div className="w-2/3 px-4">
-                    <InvoiceDetails invoice={invoices.responses.get} />
+                    {invoice && <InvoiceDetails invoice={invoice} />}
                 </div>
             </div>
         </React.Fragment>
