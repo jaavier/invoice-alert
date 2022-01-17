@@ -4,7 +4,7 @@ import useApi from '../../../hooks/useApi';
 import { useNotification } from '../../../contexts/useNotification';
 
 export default function CreateInvoice() {
-    const { post, responses } = useApi('invoices');
+    const { post } = useApi('invoices');
     const { addNotification } = useNotification()
     const [receiver, setReceiver] = useState("");
     const [amount, setAmount] = useState("");
@@ -14,17 +14,17 @@ export default function CreateInvoice() {
     const createInvoice = async (e) => {
         e.preventDefault();
         try {
-            const json = await post(
-                {
+            const json = await post({
+                body: {
                     receiver,
                     amount: parseFloat(amount),
                     sheetNumber: parseFloat(sheetNumber),
                     issueDate: DateTime.fromISO(issueDate),
                     dueDate: DateTime.fromISO(dueDate),
-                }, {
-                'Content-Type': 'application/json',
-            }
-            )
+                },
+                customHeaders: { 'Content-Type': 'application/json' }
+
+            })
             addNotification({
                 text: "Invoice created successfully",
                 type: "success",
@@ -34,7 +34,7 @@ export default function CreateInvoice() {
             console.log("🚀 ~ file: index.jsx ~ line 35 ~ createInvoice ~ error", error)
             addNotification({
                 text: error.message,
-                type: "danger",
+                type: "info",
             })
         }
     }

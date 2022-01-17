@@ -22,6 +22,6 @@ export default [
 	{
 		type: 'info',
 		text: 'All',
-		status: 'all'
+		status: ''
 	}
 ];

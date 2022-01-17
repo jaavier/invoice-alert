@@ -60,7 +60,9 @@ export default function ModifyAlert() {
 			params: { alertId }
 		})
 			.then(alert => {
+				alert = alert[0]
 				const since = DateTime.fromISO(alert.since).toFormat('yyyy-MM-dd');
+				console.log("🚀 ~ file: index.jsx ~ line 65 ~ React.useEffect ~ since", since)
 				const until = DateTime.fromISO(alert.until).toFormat('yyyy-MM-dd');
 				setSince(since);
 				setUntil(until);

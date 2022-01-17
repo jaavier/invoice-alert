@@ -27,10 +27,12 @@ router.get('/:id?/:status?/:limit?', async (req, res) => {
 	const { id, status, limit = 100 } = req.params;
 	const filter = {};
 	if (id && id !== 'all') filter.id = id;
-	if (status) filter.status = status;
-	console.log('🚀 ~ file: alerts.js ~ line 31 ~ router.get ~ filter', filter);
+	if (status && status !== 'all') filter.status = status;
 	const alerts = await Alerts.find(filter).limit(limit).sort({ createdAt: -1 });
-	if (alerts.length === 0) return res.status(404).json([]);
+	if (alerts.length === 0) {
+		return res.status(404).json([]);
+	}
+	if (alerts.length === 1) return res.json(alerts);
 	let output = [];
 	for (const alert of alerts) {
 		const invoice = await Invoices.findOne({ id: alert.invoiceId });

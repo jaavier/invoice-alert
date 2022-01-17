@@ -15,7 +15,9 @@ export default function ListAlerts(props) {
 
     const handlerDeleteAlert = async (alertId, index) => {
         if (window.confirm("Do you want to delete this alert? ")) {
-            await remove(alertId);
+            await remove({
+                params: { alertId }
+            });
             addNotification({ text: "Alert deleted successfully!", type: "success" });
         }
     }
@@ -25,7 +27,6 @@ export default function ListAlerts(props) {
             get({
                 params: { all: 'all', status, limit }
             });
-            console.log('responses.get', responses.get)
         },
         [responses['delete'], status, limit]
     );
