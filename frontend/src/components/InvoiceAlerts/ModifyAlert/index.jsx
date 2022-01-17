@@ -6,7 +6,7 @@ import Button from '../../Forms/Button';
 import Dropdown from '../../Forms/Dropdown';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import useApi from '../../../hooks/useApi';
-import { useNotification } from '../../../contexts/useNotification';
+import useNotification from '../../../hooks/useNotification';
 
 export default function ModifyAlert() {
 	const { addNotification } = useNotification();

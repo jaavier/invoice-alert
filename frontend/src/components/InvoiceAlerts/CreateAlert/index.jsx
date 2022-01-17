@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import InvoiceDetails from './InvoiceDetails';
 import Dropdown from '../../Forms/Dropdown';
-import { useNotification } from '../../../contexts/useNotification';
+import useNotification from '../../../hooks/useNotification';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import useApi from '../../../hooks/useApi';
 

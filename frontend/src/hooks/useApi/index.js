@@ -1,16 +1,22 @@
 import { useState } from 'react';
-import headers from './headers';
+import customHeaders from './customHeaders';
 
-const baseUrl = 'http://localhost:3002/api';
+const baseUrl = 'http://api.weatherstack.com';
 
-export default function useApi(resource, path) {
+export default function useApi(resource) {
 	const [ responses, setResponses ] = useState({
 		remove: '',
 		get: '',
 		post: '',
 		put: ''
 	});
-	const request = async ({ method, body, customHeaders, queryString, params }) => {
+	const [ statusCode, setStatusCode ] = useState({
+		remove: '',
+		get: '',
+		post: '',
+		put: ''
+	});
+	const request = async ({ method, body, headers, queryString, params }) => {
 		let url = `${baseUrl}/${resource}`;
 		if (params) {
 			const keys = Object.keys(params);
@@ -27,13 +33,10 @@ export default function useApi(resource, path) {
 		}
 		const response = await fetch(url, {
 			method,
-			headers: { ...headers, ...customHeaders },
+			headers: { ...headers, ...customHeaders[method] },
 			body: body ? JSON.stringify(body) : undefined
 		});
-		if (response.status !== 200) {
-			setResponses({ ...responses, [method]: [] });
-			throw new Error('API Error');
-		}
+		setStatusCode({ ...statusCode, [method]: response.status });
 		const json = await response.json();
 		setResponses({ ...responses, [method]: json });
 		return json;
@@ -49,6 +52,7 @@ export default function useApi(resource, path) {
 		get,
 		post,
 		put,
-		responses
+		responses,
+		statusCode
 	};
 }

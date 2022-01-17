@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { DateTime } from 'luxon';
 import useApi from '../../../hooks/useApi';
-import { useNotification } from '../../../contexts/useNotification';
+import useNotification from '../../../hooks/useNotification';
 
 export default function CreateInvoice() {
     const { post } = useApi('invoices');

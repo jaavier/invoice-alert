@@ -5,7 +5,7 @@ import Filters from '../../../helpers/Tables/Filters';
 import alertStatuses from '../../../hooks/useAlerts/alertStatuses';
 import LimitPerPage from '../../../helpers/Tables/LimitPerPage';
 import useApi from '../../../hooks/useApi';
-import { useNotification } from '../../../contexts/useNotification';
+import useNotification from '../../../hooks/useNotification';
 
 export default function ListAlerts(props) {
     const { addNotification } = useNotification();
