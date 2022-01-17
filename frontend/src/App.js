@@ -11,6 +11,7 @@ import Container from './components/Layout/Container';
 import Sidebar from './components/Layout/Sidebar';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import CreateContact from './components/Contacts/CreateContact';
+import ModifyContact from './components/Contacts/ModifyContact';
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 						<Route path="/invoices/create" element={<CreateInvoice />} />
 						<Route path="/contacts" element={<Contacts />} />
 						<Route path="/contacts/create" element={<CreateContact />} />
+						<Route path="/contacts/:contactId" element={<ModifyContact />} />
 						<Route path="/alerts" element={<ListAlerts />} />
 						<Route path="/alerts/create" element={<Navigate replace to="/" />} />
 						<Route path="/alerts/create/:invoiceId" element={<CreateAlert />} />

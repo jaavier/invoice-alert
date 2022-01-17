@@ -4,7 +4,6 @@ export default function Dropdown({ label, options, value, setValue, size = "1/2"
     options = [{
         value: 'Select one',
         label: 'Select one',
-        selected: true,
         hidden: true
     },
     ...options]
@@ -17,7 +16,7 @@ export default function Dropdown({ label, options, value, setValue, size = "1/2"
                 <select
                     className="appearance-none block w-full bg-white text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     onChange={(e) => setValue(e.target.value)}
-                    value={value}
+                    defaultValue='Select one'
                 >
                     {options.map((option) => (
                         <option key={option.value} {...option}>
@@ -27,6 +26,6 @@ export default function Dropdown({ label, options, value, setValue, size = "1/2"
                 </select>
             </div>
 
-        </div>
+        </div >
     )
 }

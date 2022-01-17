@@ -7,9 +7,10 @@ const { v4: uuid } = require('uuid');
 router.get('/:contactId?', async (req, res) => {
 	const { contactId } = req.params;
 	const filter = {};
-	if (contactId) filter._id = contactId;
+	if (contactId) filter.id = contactId;
 	const contacts = await Contact.find(filter);
-	return res.json(contacts);
+	if (contacts.length === 0) return res.status(404).json({ message: 'Contact not found' });
+	res.json(contacts);
 });
 
 router.post('/', Validate('contact'), async (req, res) => {
@@ -56,6 +57,22 @@ router.delete('/:contactId', async (req, res) => {
 			message: 'Error deleting client'
 		});
 	}
+});
+
+router.put('/:contactId', async (req, res) => {
+	const contact = await Contact.findOne({ id: req.params.contactId });
+	if (!contact) return res.status(404).json({ message: 'Contact not found' });
+	const { name, email, phone, address, city, state, zip, country } = req.body;
+	if (name) contact.name = name;
+	if (email) contact.email = email;
+	if (phone) contact.phone = phone;
+	if (address) contact.address = address;
+	if (city) contact.city = city;
+	if (state) contact.state = state;
+	if (zip) contact.zip = zip;
+	if (country) contact.country = country;
+	await contact.save();
+	return res.json({ message: 'Contact updated successfully' });
 });
 
 module.exports = router;

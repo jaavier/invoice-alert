@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react';
 import useApi from '../../hooks/useApi';
 import useNotification from '../../hooks/useNotification';
+import { Link } from 'react-router-dom';
 
 export default function Contacts(props) {
     const { get, remove, responses } = useApi('contacts');
     const { addNotification } = useNotification();
 
-    const deleteContact = async (contactId) => {
+    const deleteContact = (contactId) => {
         if (window.confirm("Do you want to delete this contact? ")) {
             remove({
                 params: { contactId }
@@ -64,7 +65,14 @@ export default function Contacts(props) {
                                             <td className="border px-2 py-2">{contact.zip}</td>
                                             <td className="border px-2 py-2">{contact.country}</td>
                                             <td className="border px-2 py-2">
-                                                <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-2 rounded" onClick={() => deleteContact(contact.id)}>Delete</button>
+                                                <div className="">
+                                                    <button className="mr-2" onClick={() => deleteContact(contact.id)}>
+                                                        <i className="fas fa-times"></i>
+                                                    </button>
+                                                    <Link to={`/contacts/${contact.id}`} className="mr-2">
+                                                        <i className="fas fa-pen"></i>
+                                                    </Link>
+                                                </div>
                                             </td>
                                         </tr>
                                     )
